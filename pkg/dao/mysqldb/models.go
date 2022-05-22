@@ -1,4 +1,4 @@
-package mysql
+package mysqldb
 
 // VideoInfo 视频信息表
 type VideoInfo struct {

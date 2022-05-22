@@ -82,7 +82,7 @@ func (c *Config) WithLogConfig() *Config {
 // WithMySQLConfig 初始化MySQL数据库配置
 func (c *Config) WithMySQLConfig() *Config {
 	mysqlConf := MySQLConfig{}
-	err := c.vp.UnmarshalKey("mysql", &mysqlConf)
+	err := c.vp.UnmarshalKey("mysqldb", &mysqlConf)
 	if err != nil {
 		log.Fatalf("读取配置文件失败:%v\n", err)
 	}

@@ -55,5 +55,5 @@
 |             | etcd           |                  |
 |             | log            | 日志             |
 |             | middleware     | 中间件           |
-|             | mysql          |                  |
-|             | redis          |                  |
+|             | /dao/mysqldb          |                  |
+|             | /dao/redisdb          |                  |

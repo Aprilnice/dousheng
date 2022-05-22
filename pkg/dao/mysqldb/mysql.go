@@ -1,4 +1,4 @@
-package mysql
+package mysqldb
 
 import (
 	"dousheng/config"
@@ -12,7 +12,7 @@ func Init(cfg *config.MySQLConfig, server string) (db *gorm.DB, err error) {
 	var tmp *gorm.DB
 	// "user:password@tcp(host:port)/dbname"
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=true&loc=Local", cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DB)
-	tmp, err = gorm.Open("mysql", dsn)
+	tmp, err = gorm.Open("mysqldb", dsn)
 	if err != nil {
 		return tmp,err
 	}

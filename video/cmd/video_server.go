@@ -3,8 +3,8 @@ package cmd
 import (
 	"context"
 	"dousheng/config"
+	"dousheng/pkg/dao/mysqldb"
 	"dousheng/pkg/logx"
-	"dousheng/pkg/mysql"
 	"dousheng/video/pb"
 	"github.com/jinzhu/gorm"
 	"go.uber.org/zap"
@@ -53,7 +53,7 @@ func StartVideoServer() {
 	// 声明grpc服务
 	server := grpc.NewServer()
 	// 初始化连接MySQL
-	db, err := mysql.Init(&conf.MySQLConfig,"video")
+	db, err := mysqldb.Init(&conf.MySQLConfig,"video")
 	if err != nil {
 		log.Fatal(err)
 	}
