@@ -1,0 +1,19 @@
+log:
+  savePath: log_out/
+  fileName: log
+  fileExt: .log
+  maxSize: 10
+  maxBackups: 5
+  maxAge: 30
+
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: 123456
+  db: test
+
+server:
+  Video:
+    name: dousheng/video
+    port: :8100

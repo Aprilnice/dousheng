@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "dousheng/video/cmd"
 
 func main() {
-	fmt.Println("this is video server")
+	cmd.StartVideoServer()
 }

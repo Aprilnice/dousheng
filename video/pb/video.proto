@@ -6,9 +6,8 @@ option go_package = "./pb";
 
 // douyin_publish_action_request 视频上传请求
 message douyin_publish_action_request {
-  int64 user_id = 1; // 用户id
-  string token = 2; // 用户鉴权token
-  bytes data = 3; // 视频数据
+  bytes data = 1; // 视频数据
+  string title = 2; // 视频标题
 }
 
 // douyin_publish_action_response 视频上传响应
@@ -50,10 +49,34 @@ message User {
   bool is_follow = 5; // true-已关注，false-未关注
 }
 
+// PlayVideoReq 视频播放请求
+message PlayVideoReq {
+  int64 id = 1; // 视频唯一标识
+}
+
+// PlayVideoResp 视频播放响应
+message PlayVideoResp {
+  bytes data = 1; // 视频数据
+}
+
+// GetCoverReq 视频封面请求
+message GetCoverReq {
+  int64 id = 1; // 视频封面唯一标识
+}
+
+// GetCoverResp 视频封面响应
+message GetCoverResp {
+  bytes data = 1; // 视频封面数据
+}
+
 // VideoModule 视频服务
 service VideoModule {
   // VideoPublish 视频上传
   rpc VideoPublish(douyin_publish_action_request) returns (douyin_publish_action_response);
   // VideoFeed 视频流返回
   rpc VideoFeed(douyin_feed_request) returns (douyin_feed_response);
+  // PlayVideo 视频播放
+  rpc PlayVideo(PlayVideoReq) returns (stream PlayVideoResp);
+  // GetCover 获取封面
+  rpc GetCover(GetCoverReq) returns (stream GetCoverResp);
 }
