@@ -685,7 +685,7 @@ var file_video_pb_video_proto_rawDesc = []byte{
 	0x71, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69,
 	0x64, 0x22, 0x22, 0x0a, 0x0c, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x76, 0x65, 0x72, 0x52, 0x65, 0x73,
 	0x70, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52,
-	0x04, 0x64, 0x61, 0x74, 0x61, 0x32, 0xa1, 0x02, 0x0a, 0x0b, 0x56, 0x69, 0x64, 0x65, 0x6f, 0x4d,
+	0x04, 0x64, 0x61, 0x74, 0x61, 0x32, 0x9d, 0x02, 0x0a, 0x0b, 0x56, 0x69, 0x64, 0x65, 0x6f, 0x4d,
 	0x6f, 0x64, 0x75, 0x6c, 0x65, 0x12, 0x5b, 0x0a, 0x0c, 0x56, 0x69, 0x64, 0x65, 0x6f, 0x50, 0x75,
 	0x62, 0x6c, 0x69, 0x73, 0x68, 0x12, 0x24, 0x2e, 0x76, 0x69, 0x64, 0x65, 0x6f, 0x2e, 0x64, 0x6f,
 	0x75, 0x79, 0x69, 0x6e, 0x5f, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x5f, 0x61, 0x63, 0x74,
@@ -696,15 +696,15 @@ var file_video_pb_video_proto_rawDesc = []byte{
 	0x1a, 0x2e, 0x76, 0x69, 0x64, 0x65, 0x6f, 0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x66,
 	0x65, 0x65, 0x64, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x76, 0x69,
 	0x64, 0x65, 0x6f, 0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x64, 0x5f,
-	0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x38, 0x0a, 0x09, 0x50, 0x6c, 0x61, 0x79,
+	0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x36, 0x0a, 0x09, 0x50, 0x6c, 0x61, 0x79,
 	0x56, 0x69, 0x64, 0x65, 0x6f, 0x12, 0x13, 0x2e, 0x76, 0x69, 0x64, 0x65, 0x6f, 0x2e, 0x50, 0x6c,
 	0x61, 0x79, 0x56, 0x69, 0x64, 0x65, 0x6f, 0x52, 0x65, 0x71, 0x1a, 0x14, 0x2e, 0x76, 0x69, 0x64,
 	0x65, 0x6f, 0x2e, 0x50, 0x6c, 0x61, 0x79, 0x56, 0x69, 0x64, 0x65, 0x6f, 0x52, 0x65, 0x73, 0x70,
-	0x30, 0x01, 0x12, 0x35, 0x0a, 0x08, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x76, 0x65, 0x72, 0x12, 0x12,
-	0x2e, 0x76, 0x69, 0x64, 0x65, 0x6f, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x76, 0x65, 0x72, 0x52,
-	0x65, 0x71, 0x1a, 0x13, 0x2e, 0x76, 0x69, 0x64, 0x65, 0x6f, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6f,
-	0x76, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x30, 0x01, 0x42, 0x06, 0x5a, 0x04, 0x2e, 0x2f, 0x70,
-	0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x12, 0x33, 0x0a, 0x08, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x76, 0x65, 0x72, 0x12, 0x12, 0x2e, 0x76,
+	0x69, 0x64, 0x65, 0x6f, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x76, 0x65, 0x72, 0x52, 0x65, 0x71,
+	0x1a, 0x13, 0x2e, 0x76, 0x69, 0x64, 0x65, 0x6f, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x76, 0x65,
+	0x72, 0x52, 0x65, 0x73, 0x70, 0x42, 0x06, 0x5a, 0x04, 0x2e, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -914,9 +914,9 @@ type VideoModuleClient interface {
 	// VideoFeed 视频流返回
 	VideoFeed(ctx context.Context, in *DouyinFeedRequest, opts ...grpc.CallOption) (*DouyinFeedResponse, error)
 	// PlayVideo 视频播放
-	PlayVideo(ctx context.Context, in *PlayVideoReq, opts ...grpc.CallOption) (VideoModule_PlayVideoClient, error)
+	PlayVideo(ctx context.Context, in *PlayVideoReq, opts ...grpc.CallOption) (*PlayVideoResp, error)
 	// GetCover 获取封面
-	GetCover(ctx context.Context, in *GetCoverReq, opts ...grpc.CallOption) (VideoModule_GetCoverClient, error)
+	GetCover(ctx context.Context, in *GetCoverReq, opts ...grpc.CallOption) (*GetCoverResp, error)
 }
 
 type videoModuleClient struct {
@@ -945,68 +945,22 @@ func (c *videoModuleClient) VideoFeed(ctx context.Context, in *DouyinFeedRequest
 	return out, nil
 }
 
-func (c *videoModuleClient) PlayVideo(ctx context.Context, in *PlayVideoReq, opts ...grpc.CallOption) (VideoModule_PlayVideoClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_VideoModule_serviceDesc.Streams[0], "/video.VideoModule/PlayVideo", opts...)
+func (c *videoModuleClient) PlayVideo(ctx context.Context, in *PlayVideoReq, opts ...grpc.CallOption) (*PlayVideoResp, error) {
+	out := new(PlayVideoResp)
+	err := c.cc.Invoke(ctx, "/video.VideoModule/PlayVideo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &videoModulePlayVideoClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
+	return out, nil
 }
 
-type VideoModule_PlayVideoClient interface {
-	Recv() (*PlayVideoResp, error)
-	grpc.ClientStream
-}
-
-type videoModulePlayVideoClient struct {
-	grpc.ClientStream
-}
-
-func (x *videoModulePlayVideoClient) Recv() (*PlayVideoResp, error) {
-	m := new(PlayVideoResp)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
-func (c *videoModuleClient) GetCover(ctx context.Context, in *GetCoverReq, opts ...grpc.CallOption) (VideoModule_GetCoverClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_VideoModule_serviceDesc.Streams[1], "/video.VideoModule/GetCover", opts...)
+func (c *videoModuleClient) GetCover(ctx context.Context, in *GetCoverReq, opts ...grpc.CallOption) (*GetCoverResp, error) {
+	out := new(GetCoverResp)
+	err := c.cc.Invoke(ctx, "/video.VideoModule/GetCover", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &videoModuleGetCoverClient{stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type VideoModule_GetCoverClient interface {
-	Recv() (*GetCoverResp, error)
-	grpc.ClientStream
-}
-
-type videoModuleGetCoverClient struct {
-	grpc.ClientStream
-}
-
-func (x *videoModuleGetCoverClient) Recv() (*GetCoverResp, error) {
-	m := new(GetCoverResp)
-	if err := x.ClientStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
+	return out, nil
 }
 
 // VideoModuleServer is the server API for VideoModule service.
@@ -1016,9 +970,9 @@ type VideoModuleServer interface {
 	// VideoFeed 视频流返回
 	VideoFeed(context.Context, *DouyinFeedRequest) (*DouyinFeedResponse, error)
 	// PlayVideo 视频播放
-	PlayVideo(*PlayVideoReq, VideoModule_PlayVideoServer) error
+	PlayVideo(context.Context, *PlayVideoReq) (*PlayVideoResp, error)
 	// GetCover 获取封面
-	GetCover(*GetCoverReq, VideoModule_GetCoverServer) error
+	GetCover(context.Context, *GetCoverReq) (*GetCoverResp, error)
 }
 
 // UnimplementedVideoModuleServer can be embedded to have forward compatible implementations.
@@ -1031,11 +985,11 @@ func (*UnimplementedVideoModuleServer) VideoPublish(context.Context, *DouyinPubl
 func (*UnimplementedVideoModuleServer) VideoFeed(context.Context, *DouyinFeedRequest) (*DouyinFeedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VideoFeed not implemented")
 }
-func (*UnimplementedVideoModuleServer) PlayVideo(*PlayVideoReq, VideoModule_PlayVideoServer) error {
-	return status.Errorf(codes.Unimplemented, "method PlayVideo not implemented")
+func (*UnimplementedVideoModuleServer) PlayVideo(context.Context, *PlayVideoReq) (*PlayVideoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PlayVideo not implemented")
 }
-func (*UnimplementedVideoModuleServer) GetCover(*GetCoverReq, VideoModule_GetCoverServer) error {
-	return status.Errorf(codes.Unimplemented, "method GetCover not implemented")
+func (*UnimplementedVideoModuleServer) GetCover(context.Context, *GetCoverReq) (*GetCoverResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCover not implemented")
 }
 
 func RegisterVideoModuleServer(s *grpc.Server, srv VideoModuleServer) {
@@ -1078,46 +1032,40 @@ func _VideoModule_VideoFeed_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _VideoModule_PlayVideo_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(PlayVideoReq)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _VideoModule_PlayVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PlayVideoReq)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(VideoModuleServer).PlayVideo(m, &videoModulePlayVideoServer{stream})
-}
-
-type VideoModule_PlayVideoServer interface {
-	Send(*PlayVideoResp) error
-	grpc.ServerStream
-}
-
-type videoModulePlayVideoServer struct {
-	grpc.ServerStream
-}
-
-func (x *videoModulePlayVideoServer) Send(m *PlayVideoResp) error {
-	return x.ServerStream.SendMsg(m)
-}
-
-func _VideoModule_GetCover_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(GetCoverReq)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+	if interceptor == nil {
+		return srv.(VideoModuleServer).PlayVideo(ctx, in)
 	}
-	return srv.(VideoModuleServer).GetCover(m, &videoModuleGetCoverServer{stream})
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/video.VideoModule/PlayVideo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoModuleServer).PlayVideo(ctx, req.(*PlayVideoReq))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
-type VideoModule_GetCoverServer interface {
-	Send(*GetCoverResp) error
-	grpc.ServerStream
-}
-
-type videoModuleGetCoverServer struct {
-	grpc.ServerStream
-}
-
-func (x *videoModuleGetCoverServer) Send(m *GetCoverResp) error {
-	return x.ServerStream.SendMsg(m)
+func _VideoModule_GetCover_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCoverReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoModuleServer).GetCover(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/video.VideoModule/GetCover",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoModuleServer).GetCover(ctx, req.(*GetCoverReq))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _VideoModule_serviceDesc = grpc.ServiceDesc{
@@ -1132,18 +1080,15 @@ var _VideoModule_serviceDesc = grpc.ServiceDesc{
 			MethodName: "VideoFeed",
 			Handler:    _VideoModule_VideoFeed_Handler,
 		},
-	},
-	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "PlayVideo",
-			Handler:       _VideoModule_PlayVideo_Handler,
-			ServerStreams: true,
+			MethodName: "PlayVideo",
+			Handler:    _VideoModule_PlayVideo_Handler,
 		},
 		{
-			StreamName:    "GetCover",
-			Handler:       _VideoModule_GetCover_Handler,
-			ServerStreams: true,
+			MethodName: "GetCover",
+			Handler:    _VideoModule_GetCover_Handler,
 		},
 	},
+	Streams:  []grpc.StreamDesc{},
 	Metadata: "video/pb/video.proto",
 }

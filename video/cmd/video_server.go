@@ -46,21 +46,28 @@ func newVideoServer(c context.Context, serviceContext *VideoServerContext) *Vide
 
 // StartVideoServer 开启视频服务
 func StartVideoServer() {
+	// 读取配置文件
 	conf :=config.NewConfig().WithVideoConfig().WithLogConfig().WithMySQLConfig()
+	// 配置日志
 	logx.InitLogger(*conf)
+	// 声明grpc服务
 	server := grpc.NewServer()
+	// 初始化连接MySQL
 	db, err := mysql.Init(&conf.MySQLConfig,"video")
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// 注册服务
 	pb.RegisterVideoModuleServer(
 		server,
 		newVideoServer(context.Background(),NewVideoServerContext(*conf,db)),
 	)
 
+	// 查询gRPC服务或调用gRPC方法
 	reflection.Register(server)
 
+	// 指定监听视频服务请求的端口
 	lis, err := net.Listen("tcp",conf.VideoServerConfig.Port)
 	if err != nil {
 		logx.Log.Error("TCP Video 监听失败:",
@@ -79,21 +86,25 @@ func StartVideoServer() {
 	}
 }
 
+// VideoPublish 实现上传视频方法
 func (v *VideoServer) VideoPublish(c context.Context, req *pb.DouyinPublishActionRequest) (resp *pb.DouyinPublishActionResponse, err error) {
 	resp, err = v.svcContext.VideoModel.VideoPublish(req.Data)
 	return resp, err
 }
 
+// VideoFeed 实现视频流方法
 func (v *VideoServer) VideoFeed(c context.Context, req *pb.DouyinFeedRequest) (resp *pb.DouyinFeedResponse, err error) {
 	resp, err = v.svcContext.VideoModel.VideoFeed(req.LatestTime)
 	return resp, err
 }
 
+// PlayVideo 实现视频播放方法
 func (v *VideoServer) PlayVideo(c context.Context, req *pb.PlayVideoReq) (resp *pb.PlayVideoResp, err error) {
 	resp, err = v.svcContext.VideoModel.PlayVideo(req.Id)
 	return resp, err
 }
 
+// GetCover 实现封面下载方法
 func (v *VideoServer) GetCover(c context.Context, req *pb.GetCoverReq) (resp *pb.GetCoverResp, err error) {
 	resp, err = v.svcContext.VideoModel.GetCover(req.Id)
 	return resp, err

@@ -16,6 +16,8 @@ func Init(cfg *config.MySQLConfig, server string) (db *gorm.DB, err error) {
 	if err != nil {
 		return tmp,err
 	}
+
+	// video服务需要建的表
 	if server == "video" {
 		tmp.AutoMigrate(&VideoInfo{})
 	}

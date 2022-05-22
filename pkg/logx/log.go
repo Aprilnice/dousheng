@@ -24,12 +24,14 @@ func getEncoder() zapcore.Encoder {
 	encoderConf := zap.NewProductionEncoderConfig()
 	encoderConf.EncodeTime = zapcore.ISO8601TimeEncoder
 	encoderConf.EncodeLevel = zapcore.CapitalLevelEncoder
+
 	return zapcore.NewConsoleEncoder(encoderConf)
 }
 
 // getLogWriter 获取写同步器
 func getLogWriter(conf config.Config) zapcore.WriteSyncer {
 	fileName := path.Join(conf.LogConfig.SavePath, conf.LogConfig.FileName+conf.LogConfig.FileExt)
+
 	lumLogger := &lumberjack.Logger{
 		Filename:   fileName,
 		MaxSize:    conf.LogConfig.MaxSize,
@@ -37,5 +39,6 @@ func getLogWriter(conf config.Config) zapcore.WriteSyncer {
 		MaxAge:     conf.LogConfig.MaxAge,
 		Compress:   false,
 	}
+
 	return zapcore.AddSync(lumLogger)
 }

@@ -76,7 +76,7 @@ service VideoModule {
   // VideoFeed 视频流返回
   rpc VideoFeed(douyin_feed_request) returns (douyin_feed_response);
   // PlayVideo 视频播放
-  rpc PlayVideo(PlayVideoReq) returns (stream PlayVideoResp);
+  rpc PlayVideo(PlayVideoReq) returns (PlayVideoResp);
   // GetCover 获取封面
-  rpc GetCover(GetCoverReq) returns (stream GetCoverResp);
+  rpc GetCover(GetCoverReq) returns (GetCoverResp);
 }
