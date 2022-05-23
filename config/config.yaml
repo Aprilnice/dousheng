@@ -25,9 +25,13 @@ mysql:
   max_open_connection: 200
   max_idle_connecrtion: 50
 
-
+etcd:
+  address: 192.168.141.101:2379
 
 server:
-  Video:
-    name: dousheng/video
-    port: :8100
+  video:
+    name: srv.video
+    address: 127.0.0.1:8100
+  comment:
+    name: srv.comment
+    address: 127.0.0.1:8088
