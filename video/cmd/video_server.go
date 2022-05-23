@@ -25,21 +25,21 @@ type VideoServerContext struct {
 // NewVideoServerContext 创建视频服务context实例
 func NewVideoServerContext(conf config.Config, db *gorm.DB) *VideoServerContext {
 	return &VideoServerContext{
-		Conf: 		conf,
+		Conf:       conf,
 		VideoModel: NewVideoModel(db),
 	}
 }
 
 // VideoServer  视频服务逻辑结构体
 type VideoServer struct {
-	context	   context.Context
+	context    context.Context
 	svcContext *VideoServerContext
 }
 
 // newVideoServer 创建视频服务实例
 func newVideoServer(c context.Context, serviceContext *VideoServerContext) *VideoServer {
 	return &VideoServer{
-		context: 	c,
+		context:    c,
 		svcContext: serviceContext,
 	}
 }
@@ -47,13 +47,13 @@ func newVideoServer(c context.Context, serviceContext *VideoServerContext) *Vide
 // StartVideoServer 开启视频服务
 func StartVideoServer() {
 	// 读取配置文件
-	conf :=config.NewConfig().WithVideoConfig().WithLogConfig().WithMySQLConfig()
+	conf := config.NewConfig().WithVideoConfig().WithLogConfig().WithMySQLConfig()
 	// 配置日志
 	logx.InitLogger(*conf)
 	// 声明grpc服务
 	server := grpc.NewServer()
 	// 初始化连接MySQL
-	db, err := mysqldb.Init(&conf.MySQLConfig,"video")
+	db, err := mysqldb.Init(&conf.MySQLConfig, "video")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,14 +61,14 @@ func StartVideoServer() {
 	// 注册服务
 	pb.RegisterVideoModuleServer(
 		server,
-		newVideoServer(context.Background(),NewVideoServerContext(*conf,db)),
+		newVideoServer(context.Background(), NewVideoServerContext(*conf, db)),
 	)
 
 	// 查询gRPC服务或调用gRPC方法
 	reflection.Register(server)
 
 	// 指定监听视频服务请求的端口
-	lis, err := net.Listen("tcp",conf.VideoServerConfig.Port)
+	lis, err := net.Listen("tcp", conf.VideoServerConfig.Port)
 	if err != nil {
 		logx.Log.Error("TCP Video 监听失败:",
 			zap.Error(err))

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option go_package = "../service;service";
+
+package service;
+
+
+message CommentListRequest {
+  int64 user_id = 1; //用户id
+  string token = 2;//用户鉴权token
+  int64 video_id = 3;//视频id
+}
+
+message CommentListResponse {
+  int32 status_code = 1;//状态码，0-成功，其他值-失败
+  string status_msg = 2;//返回状态描述
+  repeated Comment comment_list = 3;//评论列表
+}
+
+message Comment {
+  int64 id = 1;  //视频评论idrequired
+  User user =2;  //评论用户信息required
+  string content = 3; //评论内容
+  string create_date = 4;//评论发布日期，格式 mm-dd
+}
+
+message User {
+  int64 id = 1;  //用户id
+  string name = 2; //用户名称
+  int64 follow_count = 3; //关注总数
+  int64 follower_count = 4;//粉丝总数
+  bool is_follow = 5;  // true-已关注，false-未关注
+}
+
+
+service CommentList {
+  rpc MGetCommentList(CommentListRequest) returns (CommentListResponse);
+}
