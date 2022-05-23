@@ -12,9 +12,9 @@ type Comment struct {
 	// 评论ID
 	CommentID int64 `gorm:"not null"`
 	// 用户ID
-	UserID int64
+	UserID int64 `gorm:"not null"`
 	// 视频ID
-	VideoID int64
+	VideoID int64 `gorm:"not null"`
 	// 评论内容
 	CommentText string `gorm:"not null"`
 }
@@ -38,7 +38,7 @@ func (c *Comment) BindWithReq(req *service.CommentRequest) error {
 		c.CommentText = req.CommentText
 		return nil
 	}
-	return errors.New("model.comment: null pointer")
+	return errors.New("model.comment: nil pointer reference")
 }
 
 // CreateComment 创建一条评论
