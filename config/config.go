@@ -29,7 +29,7 @@ type (
 		Mode      string `mapstructure:"mode"`
 		Version   string `mapstructure:"version"`
 		StartTime string `mapstructure:"start_time"`
-		Port      int    `mapstructure:"port"`
+		Port      string    `mapstructure:"port"`
 		MachineID int64  `mapstructure:"machine_id"`
 	}
 
