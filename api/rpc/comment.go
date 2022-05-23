@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-var rpcService service.CommentService
+var rpcCommentService service.CommentService
 
 // InitCommentRPC 相当于初始化客户端调用
 func InitCommentRPC() {
@@ -25,19 +25,19 @@ func InitCommentRPC() {
 	)
 	rpcComment.Init()
 
-	rpcService = service.NewCommentService("srv.comment", rpcComment.Client())
+	rpcCommentService = service.NewCommentService("srv.comment", rpcComment.Client())
 
 }
 
 // CreateComment 具体的调用
 func CreateComment(ctx context.Context, req *service.CommentRequest) (resp *service.CommentResponse, err error) {
 
-	resp, err = rpcService.CreateComment(ctx, req)
+	resp, err = rpcCommentService.CreateComment(ctx, req)
 	return
 }
 
 func DeleteComment(ctx context.Context, req *service.CommentRequest) (resp *service.CommentResponse, err error) {
 
-	resp, err = rpcService.DeleteComment(ctx, req)
+	resp, err = rpcCommentService.DeleteComment(ctx, req)
 	return
 }

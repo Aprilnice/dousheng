@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package video;
 
-option go_package = "./pb";
+option go_package = "../service";
 
 // douyin_publish_action_request 视频上传请求
 message douyin_publish_action_request {
