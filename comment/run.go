@@ -2,7 +2,7 @@ package comment
 
 import (
 	"dousheng/comment/core"
-	"dousheng/comment/service"
+	comment "dousheng/comment/service"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/registry/etcd"
@@ -27,7 +27,7 @@ func Run() {
 	microService.Init()
 
 	// 服务注册
-	err := service.RegisterCommentHandler(microService.Server(), new(core.CommentService))
+	err := comment.RegisterCommentHandler(microService.Server(), new(core.CommentService))
 	if err != nil {
 		log.Println("服务注册失败失败")
 		log.Fatal(err)

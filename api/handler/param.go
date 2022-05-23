@@ -3,7 +3,7 @@ package handler
 // CommentParam 评论相关参数
 type CommentParam struct {
 	UserId      int64  `json:"user_id,omitempty" binding:"required"`     // 用户id
-	Token       string `son:"token,omitempty" binding:"required"`        // 用户鉴权
+	Token       string `json:"token,omitempty" binding:"required"`       // 用户鉴权
 	VideoId     int64  `json:"video_id,omitempty" binding:"required"`    // 视频id
 	ActionType  int32  `json:"action_type,omitempty" binding:"required"` // 1 发布评论 2删除评论
 	CommentText string `json:"comment_text,omitempty"`                   // 评论内容 在action_type=1时使用
