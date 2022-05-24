@@ -16,7 +16,7 @@ func TestNextID(t *testing.T) {
 	assert.NotEqual(t, a, b)
 }
 
-func BenchmarkSelect(b *testing.B) {
+func BenchmarkNextID(b *testing.B) {
 	err := Init("2020-12-12", 12)
 	if err != nil {
 		log.Fatal()

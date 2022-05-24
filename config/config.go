@@ -20,6 +20,7 @@ type (
 		*MySQLConfig
 		*BaseConfig
 		*EtcdConfig
+		*DurationConfig
 	}
 
 	// BaseConfig 基础配置
@@ -29,8 +30,13 @@ type (
 		Mode      string `mapstructure:"mode"`
 		Version   string `mapstructure:"version"`
 		StartTime string `mapstructure:"start_time"`
-		Port      string    `mapstructure:"port"`
+		Port      string `mapstructure:"port"`
 		MachineID int64  `mapstructure:"machine_id"`
+	}
+
+	// DurationConfig 过期时间相关的配置
+	DurationConfig struct {
+		Token int64 `mapstructure:"token"`
 	}
 
 	// LogConfig 日志配置
@@ -146,9 +152,19 @@ func (c *Config) WithServerConfig(server string) *Config {
 	if err != nil {
 		log.Fatalf("读取视频服务配置文件失败:%v\n", err)
 	}
-	return &Config{
-		ServerConfig: &serverConf,
+	c.ServerConfig = &serverConf
+	return c
+}
+
+// WithDurationConfig 初始化过期时间相关的配置
+func (c *Config) WithDurationConfig() *Config {
+	durationConf := DurationConfig{}
+	err := c.vp.UnmarshalKey("duration", &durationConf)
+	if err != nil {
+		log.Fatalf("读取过期时间相关配置文件失败:%v\n", err)
 	}
+	c.DurationConfig = &durationConf
+	return c
 }
 
 func Init() {
