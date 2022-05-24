@@ -14,6 +14,7 @@ func main() {
 	r := gin.Default()
 
 	r.POST("/dousheng/api/action/comment", handler.CommentHandler)
+	r.POST("/douyin/publish/action", handler.VideoPublishHandler)
 
 	add := config.ConfInstance().BaseConfig.Host+":"+config.ConfInstance().BaseConfig.Port
 	r.Run(add)

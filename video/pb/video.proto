@@ -6,8 +6,9 @@ option go_package = "../service";
 
 // douyin_publish_action_request 视频上传请求
 message douyin_publish_action_request {
-  bytes data = 1; // 视频数据
-  string title = 2; // 视频标题
+  int64 userId = 1;
+  bytes data = 2; // 视频数据
+  string title = 3; // 视频标题
 }
 
 // douyin_publish_action_response 视频上传响应

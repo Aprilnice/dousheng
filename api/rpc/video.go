@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"context"
 	"dousheng/video/service"
 	"fmt"
 	"github.com/micro/go-micro/v2"
@@ -26,4 +27,10 @@ func InitVideoRPC() {
 
 	rpcVideoService = service.NewVideoModuleService("srv.comment", rpcVideo.Client())
 
+}
+
+// VideoPublish 调用视频发布
+func VideoPublish(c context.Context, req *service.DouyinPublishActionRequest) (resp *service.DouyinPublishActionResponse, err error) {
+	resp, err = rpcVideoService.VideoPublish(c, req)
+	return
 }

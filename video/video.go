@@ -1,4 +1,4 @@
-package main
+package video
 
 import (
 	"dousheng/config"

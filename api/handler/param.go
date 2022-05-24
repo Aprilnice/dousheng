@@ -9,3 +9,11 @@ type CommentParam struct {
 	CommentText string `json:"comment_text,omitempty"`                   // 评论内容 在action_type=1时使用
 	CommentId   int64  `json:"comment_id,omitempty"`                     // 评论id 删除评论时使用
 }
+
+// VideoPublishParam 视频发布相关参数
+type VideoPublishParam struct {
+	// Token 用户鉴权
+	Token       string `json:"token,omitempty" binding:"required"`
+	// Title 视频标题
+	Title 		    string	`json:"title"`
+}
