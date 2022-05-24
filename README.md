@@ -35,32 +35,34 @@
 
 项目结构
 
-| package     | package      | function         |
-|-------------|--------------|------------------|
-| api         |              | api相关            |
-|             | api/handler  | handler相关        |
-|             | api/rpc      | rpc调用            |
-| comment     | core         | 核心功能实现           |
-|             | pb           | proto文件 .bat命令文件 |
-|             | service      | 生成的xx.pb.go      |
-| config      |              | 配置文件             |
-|             | config.yaml  | 配置文件             |
-|             | config.go    | 配置文件读取           |
-| interaction |              | 交互服务             |
-|             | cmd          | 交互服务具体实现         |
-|             | pb           | proto文件          |
+| package     | package    | function         |
+|-------------|------------|------------------|
+| api         |            | api相关            |
+|             | api/handler | handler相关        |
+|             | api/rpc    | rpc调用            |
+| comment     |            | 核心功能实现           |
+|             | core       | 核心功能实现           |
+|             | pb         | proto文件 .bat命令文件 |
+|             | service    | 生成的xx.pb.go      |
+| config      |            | 配置文件             |
+|             | config.yaml | 配置文件             |
+|             | config.go  | 配置文件读取           |
+| interaction |            | 交互服务             |
+|             | cmd        | 交互服务具体实现         |
+|             | pb         | proto文件          |
 |             | interaction.go | 交互服务入口           |
-| user        | cmd          |                  |
-|             | pb           |                  |
-|             | user.go      | 用户服务入口           |
-| video       | cmd          |                  |
-|             | pb           |                  |
-|             | video.go     | 视频服务入口           |
-| pkg         |              | 公共包              |
-|             | errdeal      | 错误处理             |
-|             | etcd         |                  |
-|             | log          | 日志               |
-|             | middleware   | 中间件              |
-|             | snowflaker   | ID生成器            |
+| user        | cmd        |                  |
+|             | pb         |                  |
+|             | user.go    | 用户服务入口           |
+| video       | cmd        |                  |
+|             | pb         |                  |
+|             | video.go   | 视频服务入口           |
+| pkg         |            | 公共包              |
+|             | errdeal    | 错误处理             |
+|             | etcd       |                  |
+|             | log        | 日志               |
+|             | middleware | 中间件              |
+|             | snowflaker | ID生成器            |
+|             | doushengjwt | 用户鉴权相关           |
 
 

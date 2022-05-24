@@ -28,6 +28,10 @@ mysql:
 etcd:
   address: 192.168.141.101:2379
 
+
+duration:
+  token: 7
+
 server:
   video:
     name: srv.video
