@@ -12,6 +12,7 @@ const (
 	CodeServiceErr      CodeErr = 10001
 	CodeParamErr        CodeErr = 10002
 	CodeInvalidTokenErr CodeErr = 10003
+	CodeWithoutTokenErr CodeErr = 10004
 )
 
 // 错误码对应的消息
@@ -20,6 +21,7 @@ var codeMessage = map[CodeErr]string{
 	CodeServiceErr:      "服务繁忙",
 	CodeParamErr:        "请求参数错误",
 	CodeInvalidTokenErr: "无效的Token",
+	CodeWithoutTokenErr: "未携带Token",
 }
 
 func (c CodeErr) Message() string {

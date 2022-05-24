@@ -12,6 +12,7 @@ import (
 func CommentHandler(c *gin.Context) {
 	var commentVar CommentParam
 	if err := c.ShouldBindJSON(&commentVar); err != nil {
+		fmt.Println(err)
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("参数解析错误"))
 		return
 	}

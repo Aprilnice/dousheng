@@ -88,7 +88,7 @@ func NewConfig() *Config {
 	vp.SetConfigFile("config.yaml")
 	//viper.SetConfigName("config") // 1. 设置配置文件名字
 	//viper.SetConfigType("yaml")   // 2. 设置文件类型
-	vp.AddConfigPath("./config") // 3. 配置文件路径
+	vp.AddConfigPath(".") // 3. 配置文件路径
 	if err := vp.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			log.Fatalf("no such configs file: %v\n", err)
@@ -169,7 +169,7 @@ func (c *Config) WithDurationConfig() *Config {
 
 func Init() {
 	once.Do(func() {
-		conf = NewConfig().WithBaseConfig().WithLogConfig().WithMySQLConfig().WithEtcdConfig()
+		conf = NewConfig().WithBaseConfig().WithLogConfig().WithMySQLConfig().WithEtcdConfig().WithDurationConfig()
 	})
 }
 
