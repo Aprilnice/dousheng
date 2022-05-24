@@ -21,16 +21,28 @@ func InitVideoRPC() {
 
 	rpcVideo := micro.NewService(
 		micro.Registry(microReg),
-		micro.Name("commentRpcClient"),
+		micro.Name("videoRpcClient"),
 	)
 	rpcVideo.Init()
 
-	rpcVideoService = service.NewVideoModuleService("srv.comment", rpcVideo.Client())
+	rpcVideoService = service.NewVideoModuleService("srv.video", rpcVideo.Client())
 
 }
 
 // VideoPublish 调用视频发布
 func VideoPublish(c context.Context, req *service.DouyinPublishActionRequest) (resp *service.DouyinPublishActionResponse, err error) {
 	resp, err = rpcVideoService.VideoPublish(c, req)
+	return
+}
+
+// VideoPlay 调用视频播放
+func VideoPlay(c context.Context, req *service.PlayVideoReq) (resp *service.PlayVideoResp, err error) {
+	resp, err = rpcVideoService.PlayVideo(c, req)
+	return
+}
+
+// CoverGet 调用封面下载
+func CoverGet(c context.Context, req *service.GetCoverReq) (resp *service.GetCoverResp, err error) {
+	resp, err = rpcVideoService.GetCover(c, req)
 	return
 }

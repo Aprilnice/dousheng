@@ -24,18 +24,18 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 	}
 
 	// 获取视频信息
-	videoMoudle := &mysqldb.VideoInfo{
+	videoModule := &mysqldb.VideoInfo{
 		Id: videoId,
 		Title: req.Title,
 		AuthorId: req.UserId,
-		PlayUrl: "127.0.0.1:8100/play/"+ strconv.FormatInt(videoId, 10) + ".mp4",
+		PlayUrl: "127.0.0.1:8080/play/?video_id="+ strconv.FormatInt(videoId, 10),
 		CoverUrl: "",
 		FavoriteCount: 0,
 		CommentCount: 0,
 	}
 
 	// 视频信息存入数据库
-	if err = mysqldb.PublishVideo(videoMoudle); err != nil {
+	if err = mysqldb.PublishVideo(videoModule); err != nil {
 		// 出现错误  这里一般都是数据库错误
 		ResponsePublishErr(err, resp)
 		return err

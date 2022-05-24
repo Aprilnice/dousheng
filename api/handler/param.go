@@ -15,5 +15,5 @@ type VideoPublishParam struct {
 	// Token 用户鉴权
 	Token       string `json:"token,omitempty" binding:"required"`
 	// Title 视频标题
-	Title 		    string	`json:"title"`
+	Title 		string	`json:"title"`
 }
