@@ -21,6 +21,7 @@ func main() {
 	}
 
 	println(snowflaker.NextID(), "------------------------")
+	println(config.ConfInstance().DurationConfig.Token, "------------------------")
 
 	// 初始化数据库
 	if err := mysqldb.Init(config.ConfInstance().MySQLConfig); err != nil {
@@ -33,8 +34,6 @@ func main() {
 		log.Println("数据库迁移失败")
 		log.Fatal(err)
 	}
-
-	//select {}
 
 	comment.Run()
 	video.VideoRun()

@@ -4,18 +4,20 @@ import (
 	"dousheng/config"
 	"dousheng/pkg/errdeal"
 	"github.com/dgrijalva/jwt-go"
-	"sync"
 	"time"
 )
 
 var (
-	tokenExpireDuration time.Duration
+	// token过期时间 24小时 * 天
+	tokenExpireDuration = 24 * time.Hour * time.Duration(config.ConfInstance().DurationConfig.Token)
 	// 秘钥
 	secret = []byte("dousheng")
 	// 签发人
 	issuer = "dousheng.com"
-	once   sync.Once
 )
+
+type JwtToken struct {
+}
 
 type DouShengClaims struct {
 	UserName string `json:"username"`
@@ -23,16 +25,18 @@ type DouShengClaims struct {
 	jwt.StandardClaims
 }
 
+func NewJwtToken() *JwtToken {
+	return &JwtToken{}
+}
+
 // GenerateToken 生成用户鉴权
-// 用户名 和 用户id
-func GenerateToken(username string, userid int64) (token string, err error) {
-	// token过期时间 24小时 * 天
+func (jt *JwtToken) GenerateToken(username string, userid int64) (token string, err error) {
 	dsc := DouShengClaims{
 		UserName: username,
 		UserID:   userid,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: tokenExpiresAt(), // 过期时间
-			Issuer:    issuer,           // 签发人
+			ExpiresAt: time.Now().Add(tokenExpireDuration).Unix(), // 过期时间
+			Issuer:    issuer,                                     // 签发人
 		},
 	}
 	// 使用指定的签名方法创建签名对象
@@ -42,7 +46,7 @@ func GenerateToken(username string, userid int64) (token string, err error) {
 }
 
 // ParseToken 解析JWT
-func ParseToken(token string) (*DouShengClaims, error) {
+func (jt *JwtToken) ParseToken(token string) (*DouShengClaims, error) {
 
 	dsc := new(DouShengClaims) // 存放解析出来的数据
 
@@ -59,12 +63,4 @@ func ParseToken(token string) (*DouShengClaims, error) {
 	}
 
 	return dsc, nil
-}
-
-// 获取过期时间
-func tokenExpiresAt() int64 {
-	once.Do(func() {
-		tokenExpireDuration = 24 * time.Hour * time.Duration(config.ConfInstance().DurationConfig.Token)
-	})
-	return time.Now().Add(tokenExpireDuration).Unix()
 }

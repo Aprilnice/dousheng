@@ -1,29 +1,26 @@
 package main
 
 import (
-	"dousheng/api/handler"
+	"dousheng/api/router"
 	"dousheng/api/rpc"
 	"dousheng/config"
-	"github.com/gin-gonic/gin"
+	"fmt"
+	"log"
 )
 
 func main() {
 
+	config.Init()
 	rpc.InitCommentRPC()
 	rpc.InitVideoRPC()
+	fmt.Println(config.ConfInstance())
+	// 路由注册
+	r := router.Setup()
+	addr := config.ConfInstance().BaseConfig.Host + ":" + config.ConfInstance().BaseConfig.Port
+	//addr := fmt.Sprintf("%s:%s", config.ConfInstance().BaseConfig.Host, config.ConfInstance().BaseConfig.Port)
 
-	r := gin.Default()
-
-	// 评论
-	r.POST("/dousheng/api/action/comment", handler.CommentHandler)
-	// 视频发布
-	r.POST("/douyin/publish/action", handler.VideoPublishHandler)
-	// 视频播放
-	r.POST("/play/:video_id", handler.VideoPlayHandler)
-	// 获取封面
-	r.POST("/cover/:cover_id", handler.GetCoverHandler)
-
-	add := config.ConfInstance().BaseConfig.Host+":"+config.ConfInstance().BaseConfig.Port
-	r.Run(add)
-
+	// 启动 API 服务
+	if err := r.Run(addr); err != nil {
+		log.Fatal(err)
+	}
 }
