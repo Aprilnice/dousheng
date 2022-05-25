@@ -2,6 +2,8 @@ package rpc
 
 import (
 	"context"
+	"dousheng/config"
+	"dousheng/pkg/constant"
 	"dousheng/video/service"
 	"fmt"
 	"github.com/micro/go-micro/v2"
@@ -16,16 +18,19 @@ var rpcVideoService service.VideoModuleService
 func InitVideoRPC() {
 	fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
 	microReg := etcd.NewRegistry(
-		registry.Addrs("192.168.141.101:2379"),
+		registry.Addrs(config.ConfInstance().EtcdConfig.Address),
 	)
 
 	rpcVideo := micro.NewService(
 		micro.Registry(microReg),
-		micro.Name("videoRpcClient"),
+		micro.Name("rpcVideoClient"),
 	)
 	rpcVideo.Init()
 
-	rpcVideoService = service.NewVideoModuleService("srv.video", rpcVideo.Client())
+	rpcVideoService = service.NewVideoModuleService(
+		config.ConfInstance().ServerConfig.Server(constant.ServerComment).Name,
+		rpcVideo.Client(),
+	)
 
 }
 

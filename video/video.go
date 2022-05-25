@@ -2,8 +2,10 @@ package video
 
 import (
 	"dousheng/config"
+	"dousheng/pkg/constant"
 	"dousheng/video/core"
 	"dousheng/video/service"
+	"fmt"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/registry/etcd"
@@ -12,18 +14,18 @@ import (
 )
 
 func VideoRun() {
-	// 获取配置文件
-	commentConf := *(config.ConfInstance())
-	(&commentConf).WithServerConfig("video")
+	// 初始化 视频服务的相关配置信息
+	config.ConfInstance().WithServerConfig(constant.ServerVideo)
+	fmt.Println((*config.ConfInstance().ServerConfig).Server(constant.ServerVideo))
 	// 注册件
 	etcdReg := etcd.NewRegistry(
-		registry.Addrs(commentConf.EtcdConfig.Address),
+		registry.Addrs(config.ConfInstance().EtcdConfig.Address),
 	)
 	// 得到一个微服务实例
 	microService := micro.NewService(
-		micro.Name(commentConf.ServerConfig.Name),
+		micro.Name(config.ConfInstance().ServerConfig.Server(constant.ServerVideo).Name),
 		micro.Registry(etcdReg),
-		micro.Address(commentConf.ServerConfig.Address),
+		micro.Address(config.ConfInstance().ServerConfig.Server(constant.ServerVideo).Address),
 		micro.RegisterTTL(time.Second*10),
 		micro.RegisterInterval(time.Second*10),
 	)
