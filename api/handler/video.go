@@ -5,6 +5,7 @@ import (
 	"dousheng/api/rpc"
 	"dousheng/pkg/doushengjwt"
 	"dousheng/pkg/errdeal"
+	middlewares "dousheng/pkg/middleware"
 	video "dousheng/video/service"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
@@ -21,8 +22,8 @@ func VideoPublishHandler(c *gin.Context) {
 		return
 	}
 
-	// 解析token,获取userid
-	claims, err := doushengjwt.ParseToken(param.Token)
+	// 获取userid
+	userId, _ := c.Get(middlewares.ContextUserID)
 
 	// 获取视频文件
 	file, _, err := c.Request.FormFile("file")
@@ -34,7 +35,7 @@ func VideoPublishHandler(c *gin.Context) {
 	// 获得文件二进制流
 	bFile, _ := ioutil.ReadAll(file)
 	req := video.DouyinPublishActionRequest{
-		UserId: claims.UserID,
+		UserId: userId.(int64),
 		Title: param.Title,
 		Data:  bFile,
 	}
