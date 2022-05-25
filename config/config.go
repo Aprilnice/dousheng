@@ -111,9 +111,9 @@ func (s *ServerConfig) put(server string, srvInstance *Server) bool {
 }
 
 // NewConfig 创建配置实例
-func NewConfig() *Config {
+func NewConfig(path string) *Config {
 	vp := viper.New()
-	vp.SetConfigFile("./config/config.yaml")
+	vp.SetConfigFile(path + "/config.yaml")
 	//viper.SetConfigName("config") // 1. 设置配置文件名字
 	//viper.SetConfigType("yaml")   // 2. 设置文件类型
 	vp.AddConfigPath(".") // 3. 配置文件路径
@@ -198,9 +198,9 @@ func (c *Config) WithDurationConfig() *Config {
 	return c
 }
 
-func Init() {
+func Init(path string) {
 	once.Do(func() {
-		conf = NewConfig().WithBaseConfig().WithLogConfig().WithMySQLConfig().WithEtcdConfig().WithDurationConfig()
+		conf = NewConfig(path).WithBaseConfig().WithLogConfig().WithMySQLConfig().WithEtcdConfig().WithDurationConfig()
 	})
 }
 

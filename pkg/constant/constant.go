@@ -6,5 +6,5 @@ package constant
 
 const (
 	ServerComment = "comment" // 评论服务
-	ServerVideo   = "vide"
+	ServerVideo   = "video"
 )

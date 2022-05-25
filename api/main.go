@@ -11,7 +11,7 @@ import (
 
 func main() {
 
-	config.Init()
+	config.Init("../config")
 	config.ConfInstance().WithServerConfig(constant.ServerComment)
 	rpc.InitCommentRPC()
 	rpc.InitVideoRPC()

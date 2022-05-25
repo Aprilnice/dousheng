@@ -5,7 +5,6 @@ import (
 	"dousheng/pkg/errdeal"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 )
 
 const (
@@ -42,22 +41,10 @@ func JwtTokenMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		// 取出来请求的userid
-		userID, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
-		if err != nil {
-			c.JSON(http.StatusOK, errdeal.NewResponse(errdeal.CodeParamErr)) // 请求参数有误
-			c.Abort()
-			return
-		}
-		// 判断和token中的userID是否相等
-		if parseToken.UserID != userID {
-			c.JSON(http.StatusOK, errdeal.NewResponse(errdeal.CodeInvalidTokenErr)) // 无效的token
-			c.Abort()
-			return
-		}
 
 		// 中间件判断用户登录的话 将用户id保存在 context里面 保证后续可以获取到
 		c.Set(ContextUserID, parseToken.UserID)
+
 		c.Next()
 	}
 }

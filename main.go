@@ -11,7 +11,7 @@ import (
 func main() {
 
 	// 初始化配置
-	config.Init()
+	config.Init("./config")
 
 	// 初始化ID生成器
 	if err := snowflaker.Init(config.ConfInstance().StartTime, config.ConfInstance().MachineID); err != nil {
