@@ -10,8 +10,12 @@ import (
 )
 
 func CommentHandler(c *gin.Context) {
+	/*
+		"/douyin/comment/action/?token=douyin123456&video_id=1&action_type=1&comment_text=%E6%B3%A5%E5%9A%8E"
+	*/
+
 	var commentVar CommentParam
-	if err := c.ShouldBindJSON(&commentVar); err != nil {
+	if err := c.ShouldBindQuery(&commentVar); err != nil {
 		fmt.Println(err)
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("参数解析错误"))
 		return

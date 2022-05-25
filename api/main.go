@@ -4,15 +4,15 @@ import (
 	"dousheng/api/router"
 	"dousheng/api/rpc"
 	"dousheng/config"
-	"fmt"
+	"dousheng/pkg/constant"
 	"log"
 )
 
 func main() {
 
 	config.Init()
+	config.ConfInstance().WithServerConfig(constant.ServerComment)
 	rpc.InitCommentRPC()
-	fmt.Println(config.ConfInstance())
 	// 路由注册
 	r := router.Setup()
 

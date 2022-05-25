@@ -20,9 +20,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	println(snowflaker.NextID(), "------------------------")
-	println(config.ConfInstance().DurationConfig.Token, "------------------------")
-
 	// 初始化数据库
 	if err := mysqldb.Init(config.ConfInstance().MySQLConfig); err != nil {
 		log.Println("mysql数据库初始化失败")
