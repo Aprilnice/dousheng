@@ -26,6 +26,10 @@ func Setup() *gin.Engine {
 		r.POST("/douyin/publish/action", handler.VideoPublishHandler)
 
 	}
+	// 视频播放
+	r.POST("/play/:video_id", handler.VideoPlayHandler)
+	// 获取封面
+	r.POST("/cover/:cover_id", handler.GetCoverHandler)
 
 	return r
 
