@@ -5,6 +5,7 @@ import (
 	"dousheng/api/rpc"
 	"dousheng/config"
 	"dousheng/pkg/constant"
+	"fmt"
 	"log"
 )
 
@@ -13,11 +14,9 @@ func main() {
 	config.Init()
 	config.ConfInstance().WithServerConfig(constant.ServerComment)
 	rpc.InitCommentRPC()
-<<<<<<< HEAD
-=======
 	rpc.InitVideoRPC()
 	fmt.Println(config.ConfInstance())
->>>>>>> ee82b525b8e190e4024ae8a0dfb31f3d19009b9b
+
 	// 路由注册
 	r := router.Setup()
 	addr := config.ConfInstance().BaseConfig.Host + ":" + config.ConfInstance().BaseConfig.Port

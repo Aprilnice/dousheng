@@ -5,7 +5,6 @@ import (
 	"dousheng/config"
 	"dousheng/pkg/dao/mysqldb"
 	"dousheng/pkg/snowflaker"
-	"dousheng/video"
 	"log"
 )
 
@@ -33,6 +32,6 @@ func main() {
 	}
 
 	comment.Run()
-	video.VideoRun()
+	//video.VideoRun()
 
 }

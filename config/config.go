@@ -88,7 +88,10 @@ type (
 
 // Server 从ServerConfig 中获取指定的Server
 func (s *ServerConfig) Server(server string) *Server {
-	srv := (*s)[server]
+	srv, ok := (*s)[server]
+	if !ok {
+		log.Fatalf("%s服务配置未初始化", server)
+	}
 	return srv
 }
 
