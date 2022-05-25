@@ -9,6 +9,7 @@ import (
 var (
 	conf *Config
 	once sync.Once
+	mu   sync.Mutex
 )
 
 type (
@@ -73,14 +74,41 @@ type (
 		Address string
 	}
 
-	// ServerConfig 配置服务
-	ServerConfig struct {
+	Server struct {
 		// Name 服务名
 		Name string
 		// address 服务地址
 		Address string
 	}
+
+	// ServerConfig 配置服务
+	// 这里会有多个服务 应该用map存储
+	ServerConfig map[string]*Server
 )
+
+// Server 从ServerConfig 中获取指定的Server
+func (s *ServerConfig) Server(server string) *Server {
+	srv, ok := (*s)[server]
+	if !ok {
+		log.Fatalf("%s服务配置未初始化", server)
+	}
+	return srv
+}
+
+// put 往ServerConfig添加服务配置信息
+// 加锁操作
+func (s *ServerConfig) put(server string, srvInstance *Server) bool {
+	mu.Lock()
+	defer mu.Unlock()
+	return func() bool {
+		// 已经存在同名服务了 不允许修改
+		if _, ok := (*s)[server]; ok {
+			return false
+		}
+		(*s)[server] = srvInstance
+		return true
+	}()
+}
 
 // NewConfig 创建配置实例
 func NewConfig() *Config {
@@ -96,8 +124,10 @@ func NewConfig() *Config {
 			log.Fatalf("read configs error: %v\n", err)
 		}
 	}
+	serverConf := make(ServerConfig, 0)
 	return &Config{
-		vp: vp,
+		vp:           vp,
+		ServerConfig: &serverConf,
 	}
 }
 
@@ -117,7 +147,7 @@ func (c *Config) WithMySQLConfig() *Config {
 	mysqlConf := MySQLConfig{}
 	err := c.vp.UnmarshalKey("mysql", &mysqlConf)
 	if err != nil {
-		log.Fatalf("读取配置文件失败:%v\n", err)
+		log.Fatalf("读取数据库配置文件失败:%v\n", err)
 	}
 	c.MySQLConfig = &mysqlConf
 	return c
@@ -128,7 +158,7 @@ func (c *Config) WithBaseConfig() *Config {
 	baseConf := BaseConfig{}
 	err := c.vp.UnmarshalKey("base", &baseConf)
 	if err != nil {
-		log.Fatalf("读取视频服务配置文件失败:%v\n", err)
+		log.Fatalf("读取基础配置文件失败:%v\n", err)
 	}
 	c.BaseConfig = &baseConf
 	return c
@@ -139,7 +169,7 @@ func (c *Config) WithEtcdConfig() *Config {
 	etcdConf := EtcdConfig{}
 	err := c.vp.UnmarshalKey("etcd", &etcdConf)
 	if err != nil {
-		log.Fatalf("读取视频服务配置文件失败:%v\n", err)
+		log.Fatalf("读取ETCD服务配置文件失败:%v\n", err)
 	}
 	c.EtcdConfig = &etcdConf
 	return c
@@ -147,12 +177,13 @@ func (c *Config) WithEtcdConfig() *Config {
 
 // WithServerConfig 初始化服务配置
 func (c *Config) WithServerConfig(server string) *Config {
-	serverConf := ServerConfig{}
-	err := c.vp.UnmarshalKey("server."+server, &serverConf)
+	srvInstance := Server{}
+	err := c.vp.UnmarshalKey("server."+server, &srvInstance)
 	if err != nil {
-		log.Fatalf("读取视频服务配置文件失败:%v\n", err)
+		log.Fatalf("读取服务配置文件失败:%v\n", err)
 	}
-	c.ServerConfig = &serverConf
+	// 往server map 中添加服务实体
+	c.ServerConfig.put(server, &srvInstance)
 	return c
 }
 

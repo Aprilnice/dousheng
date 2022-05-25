@@ -3,29 +3,32 @@ package rpc
 import (
 	"context"
 	"dousheng/comment/service"
-	"fmt"
+	"dousheng/config"
+	"dousheng/pkg/constant"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/registry/etcd"
-	"time"
 )
 
 var rpcCommentService service.CommentService
 
 // InitCommentRPC 相当于初始化客户端调用
 func InitCommentRPC() {
-	fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
+
 	microReg := etcd.NewRegistry(
-		registry.Addrs("192.168.141.101:2379"),
+		registry.Addrs(config.ConfInstance().EtcdConfig.Address),
 	)
 
 	rpcComment := micro.NewService(
 		micro.Registry(microReg),
-		micro.Name("commentRpcClient"),
+		micro.Name("rpcCommentClient"),
 	)
 	rpcComment.Init()
 
-	rpcCommentService = service.NewCommentService("srv.comment", rpcComment.Client())
+	rpcCommentService = service.NewCommentService(
+		config.ConfInstance().ServerConfig.Server(constant.ServerComment).Name,
+		rpcComment.Client(),
+	)
 
 }
 
