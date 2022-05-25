@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"strconv"
+	"time"
 )
 
 // VideoPublishHandler 视频发布
@@ -93,4 +94,44 @@ func GetCoverHandler(c *gin.Context) {
 
 	c.Header("Content-Type", "image/jpeg")
 	c.Writer.Write(resp.Data)
+}
+
+// GetVideoFeedHandler 获取视频流
+func GetVideoFeedHandler(c *gin.Context) {
+	// 获取参数
+	latest := c.Query("latest_time")
+	token := c.Query("token")
+	var tmp,id int64
+	id = 0
+	if latest == "" {
+		tmp = time.Now().UnixMilli()
+	}else{
+		tmp, _ = strconv.ParseInt(latest, 10, 64)
+	}
+
+	// 如果登录,解析token
+	if token != "" {
+		claims,_ := doushengjwt.ParseToken(token)
+		id = claims.UserID
+	}
+	req := video.DouyinFeedRequest{
+		UserId: id,
+		LatestTime: tmp,
+	}
+
+	// rpc调用
+	resp, err := rpc.VideoFeed(context.Background(), &req)
+
+
+	// 处理错误
+	var response *errdeal.Response
+	if err != nil {
+		response = errdeal.NewResponse(errdeal.CodeErr(resp.StatusCode)).WithErr(err)
+		HttpResponse(c, response)
+		return
+	}
+
+	// 成功
+	response = errdeal.NewResponse(errdeal.CodeErr(resp.StatusCode))
+	HttpResponse(c, response)
 }

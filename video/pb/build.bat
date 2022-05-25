@@ -1,3 +1,1 @@
-protoc --proto_path=.^
- --go_out ../service --micro_out ../service^
- video.proto
+protoc --proto_path=. --go_out ./video/service --micro_out ./video/service ./video/pb/video.proto

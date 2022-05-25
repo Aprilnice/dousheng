@@ -46,3 +46,9 @@ func CoverGet(c context.Context, req *service.GetCoverReq) (resp *service.GetCov
 	resp, err = rpcVideoService.GetCover(c, req)
 	return
 }
+
+// VideoFeed 获取视频流
+func VideoFeed(c context.Context, req *service.DouyinFeedRequest) (resp *service.DouyinFeedResponse, err error) {
+	resp, err = rpcVideoService.VideoFeed(c, req)
+	return
+}

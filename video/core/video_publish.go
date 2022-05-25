@@ -8,6 +8,7 @@ import (
 	video "dousheng/video/service"
 	"io/ioutil"
 	"strconv"
+	"time"
 )
 
 // VideoPublish 上传视频
@@ -32,6 +33,8 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 		CoverUrl: "",
 		FavoriteCount: 0,
 		CommentCount: 0,
+		// 获得毫秒级时间戳
+		PublishTime: time.Now().UnixMilli(),
 	}
 
 	// 视频信息存入数据库
