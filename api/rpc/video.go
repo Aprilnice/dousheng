@@ -23,12 +23,12 @@ func InitVideoRPC() {
 
 	rpcVideo := micro.NewService(
 		micro.Registry(microReg),
-		micro.Name("rpcVideoClient"),
+		micro.Name("rpcVideoModuleClient"),
 	)
 	rpcVideo.Init()
 
 	rpcVideoService = service.NewVideoModuleService(
-		config.ConfInstance().ServerConfig.Server(constant.ServerComment).Name,
+		config.ConfInstance().ServerConfig.Server(constant.ServerVideo).Name,
 		rpcVideo.Client(),
 	)
 

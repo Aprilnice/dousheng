@@ -26,7 +26,7 @@ mysql:
   max_idle_connecrtion: 50
 
 etcd:
-  address: 192.168.141.101:2379
+  address: 127.0.0.1:2379
 
 
 duration:

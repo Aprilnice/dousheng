@@ -23,15 +23,16 @@ func Setup() *gin.Engine {
 		// 点赞
 
 		// 视频发布  从form-data中获取token  formKey : form-data的标识名
-		r.POST("/douyin/publish/action", middlewares.JwtTokenMiddleware(middlewares.FormToken("req")), handler.VideoPublishHandler)
+		//r.POST("/douyin/publish/action", middlewares.JwtTokenMiddleware(middlewares.FormToken("req")), handler.VideoPublishHandler)
+		r.POST("/douyin/publish/action", handler.VideoPublishHandler)
 
 	}
 	// 视频播放
-	r.POST("/play", handler.VideoPlayHandler)
+	r.GET("/play", handler.VideoPlayHandler)
 	// 获取封面
 	r.POST("/cover", handler.GetCoverHandler)
 	// 获取视频流
-	r.POST("/douyin/feed", handler.GetVideoFeedHandler)
+	r.GET("/douyin/feed", handler.GetVideoFeedHandler)
 
 	return r
 

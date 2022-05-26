@@ -11,15 +11,16 @@ import (
 
 func main() {
 
-	config.Init("./config")
+	config.Init("../config")
 	config.ConfInstance().WithServerConfig(constant.ServerComment)
+	config.ConfInstance().WithServerConfig(constant.ServerVideo)
 	rpc.InitCommentRPC()
 	rpc.InitVideoRPC()
 	fmt.Println(config.ConfInstance())
 
 	// 路由注册
 	r := router.Setup()
-	addr := config.ConfInstance().BaseConfig.Host + ":" + config.ConfInstance().BaseConfig.Port
+	addr := ":" + config.ConfInstance().BaseConfig.Port
 	//addr := fmt.Sprintf("%s:%s", config.ConfInstance().BaseConfig.Host, config.ConfInstance().BaseConfig.Port)
 
 	// 启动 API 服务

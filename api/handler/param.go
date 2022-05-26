@@ -13,7 +13,7 @@ type CommentParam struct {
 // VideoPublishParam 视频发布相关参数
 type VideoPublishParam struct {
 	// Token 用户鉴权
-	Token string `json:"token,omitempty" binding:"required"`
+	Token string `json:"token,omitempty" form:"token" binding:"required"`
 	// Title 视频标题
-	Title string `json:"title"`
+	Title string `json:"title" form:"title"`
 }

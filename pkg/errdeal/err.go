@@ -1,6 +1,7 @@
 package errdeal
 
 import (
+	video "dousheng/video/service"
 	"fmt"
 )
 
@@ -69,4 +70,12 @@ func (r *Response) WithErr(err error) *Response {
 func (r *Response) WithData(data interface{}) *Response {
 	r.Data = data
 	return r
+}
+
+// FeedResponse 响应
+type FeedResponse struct {
+	StatusCode    int32          `json:"code"`
+	StatusMessage string         `json:"message"`
+	NextTime      int64		     `json:"next_time"`
+	VideoList	  []*video.Video `json:"video_list"`
 }
