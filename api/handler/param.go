@@ -10,6 +10,11 @@ type CommentParam struct {
 	CommentId   int64  `form:"comment_id" json:"comment_id,omitempty,string"`                // 评论id 删除评论时使用
 }
 
+type CommentListParam struct {
+	VideoId int64  `form:"video_id" json:"video_id,omitempty,string" binding:"required"` // 视频id
+	Token   string `form:"token" json:"token,omitempty" binding:"required"`              // 用户鉴权
+}
+
 // VideoPublishParam 视频发布相关参数
 type VideoPublishParam struct {
 	// Token 用户鉴权

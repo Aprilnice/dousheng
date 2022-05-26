@@ -1,10 +1,10 @@
 package main
 
 import (
+	"dousheng/comment"
 	"dousheng/config"
 	"dousheng/pkg/dao/mysqldb"
 	"dousheng/pkg/snowflaker"
-	"dousheng/video"
 	"log"
 )
 
@@ -31,7 +31,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//comment.Run()
-	video.VideoRun()
+	comment.Run()
+	//video.VideoRun()
 
 }

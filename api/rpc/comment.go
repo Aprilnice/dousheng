@@ -2,7 +2,7 @@ package rpc
 
 import (
 	"context"
-	"dousheng/comment/service"
+	comment "dousheng/comment/service"
 	"dousheng/config"
 	"dousheng/pkg/constant"
 	"github.com/micro/go-micro/v2"
@@ -10,7 +10,9 @@ import (
 	"github.com/micro/go-micro/v2/registry/etcd"
 )
 
-var rpcCommentService service.CommentService
+var (
+	rpcCommentService comment.DyCommentService
+)
 
 // InitCommentRPC 相当于初始化客户端调用
 func InitCommentRPC() {
@@ -25,7 +27,7 @@ func InitCommentRPC() {
 	)
 	rpcComment.Init()
 
-	rpcCommentService = service.NewCommentService(
+	rpcCommentService = comment.NewDyCommentService(
 		config.ConfInstance().ServerConfig.Server(constant.ServerComment).Name,
 		rpcComment.Client(),
 	)
@@ -33,14 +35,19 @@ func InitCommentRPC() {
 }
 
 // CreateComment 具体的调用
-func CreateComment(ctx context.Context, req *service.CommentRequest) (resp *service.CommentResponse, err error) {
+func CreateComment(ctx context.Context, req *comment.CommentRequest) (resp *comment.CommentResponse, err error) {
 
 	resp, err = rpcCommentService.CreateComment(ctx, req)
 	return
 }
 
-func DeleteComment(ctx context.Context, req *service.CommentRequest) (resp *service.CommentResponse, err error) {
+func DeleteComment(ctx context.Context, req *comment.CommentRequest) (resp *comment.CommentResponse, err error) {
 
 	resp, err = rpcCommentService.DeleteComment(ctx, req)
+	return
+}
+
+func CommentList(ctx context.Context, req *comment.CommentListRequest) (resp *comment.CommentListResponse, err error) {
+	resp, err = rpcCommentService.CommentList(ctx, req)
 	return
 }

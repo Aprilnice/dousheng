@@ -13,8 +13,10 @@ func main() {
 
 	config.Init("./config")
 	config.ConfInstance().WithServerConfig(constant.ServerComment)
+
 	rpc.InitCommentRPC()
 	rpc.InitVideoRPC()
+
 	fmt.Println(config.ConfInstance())
 
 	// 路由注册
