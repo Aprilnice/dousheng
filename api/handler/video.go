@@ -7,6 +7,8 @@ import (
 	"dousheng/pkg/errdeal"
 	middlewares "dousheng/pkg/middleware"
 	video "dousheng/video/service"
+	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"strconv"
@@ -16,8 +18,10 @@ import (
 // VideoPublishHandler 视频发布
 func VideoPublishHandler(c *gin.Context) {
 	// 获取参数
+	formReq := c.PostForm("req")
+	fmt.Println(formReq)
 	var param VideoPublishParam
-	if err := c.ShouldBindJSON(&param); err != nil {
+	if err := json.Unmarshal([]byte(formReq), &param); err != nil {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("参数解析错误"))
 		return
 	}
@@ -26,7 +30,8 @@ func VideoPublishHandler(c *gin.Context) {
 	userId, _ := c.Get(middlewares.ContextUserID)
 
 	// 获取视频文件
-	file, _, err := c.Request.FormFile("file")
+	file, fh, err := c.Request.FormFile("file")
+	fmt.Println(fh.Filename)
 	if err != nil {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("视频上传错误"))
 		return
@@ -36,8 +41,8 @@ func VideoPublishHandler(c *gin.Context) {
 	bFile, _ := ioutil.ReadAll(file)
 	req := video.DouyinPublishActionRequest{
 		UserId: userId.(int64),
-		Title: param.Title,
-		Data:  bFile,
+		Title:  param.Title,
+		Data:   bFile,
 	}
 
 	// rpc 调用
@@ -102,27 +107,26 @@ func GetVideoFeedHandler(c *gin.Context) {
 	// 获取参数
 	latest := c.Query("latest_time")
 	token := c.Query("token")
-	var tmp,id int64
+	var tmp, id int64
 	id = 0
 	if latest == "" {
 		tmp = time.Now().UnixMilli()
-	}else{
+	} else {
 		tmp, _ = strconv.ParseInt(latest, 10, 64)
 	}
 
 	// 如果登录,解析token
 	if token != "" {
-		claims,_ := doushengjwt.ParseToken(token)
+		claims, _ := doushengjwt.ParseToken(token)
 		id = claims.UserID
 	}
 	req := video.DouyinFeedRequest{
-		UserId: id,
+		UserId:     id,
 		LatestTime: tmp,
 	}
 
 	// rpc调用
 	resp, err := rpc.VideoFeed(context.Background(), &req)
-
 
 	// 处理错误
 	var response *errdeal.Response

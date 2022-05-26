@@ -17,13 +17,13 @@ func Setup() *gin.Engine {
 
 	// 这里面的业务路由使用到 jwt 验证 中间件
 	{
-		// 评论
-		r.POST("/dousheng/comment/action", middlewares.JwtTokenMiddleware(), handler.CommentHandler)
+		// 评论  从url中获取token
+		r.POST("/dousheng/comment/action", middlewares.JwtTokenMiddleware(middlewares.URLToken()), handler.CommentHandler)
 
 		// 点赞
 
-		// 视频发布
-		r.POST("/douyin/publish/action", handler.VideoPublishHandler)
+		// 视频发布  从form-data中获取token  formKey : form-data的标识名
+		r.POST("/douyin/publish/action", middlewares.JwtTokenMiddleware(middlewares.FormToken("req")), handler.VideoPublishHandler)
 
 	}
 	// 视频播放
@@ -31,7 +31,7 @@ func Setup() *gin.Engine {
 	// 获取封面
 	r.POST("/cover", handler.GetCoverHandler)
 	// 获取视频流
-	r.POST("/douyin/feed",handler.GetVideoFeedHandler)
+	r.POST("/douyin/feed", handler.GetVideoFeedHandler)
 
 	return r
 
