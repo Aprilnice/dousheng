@@ -15,6 +15,11 @@ func (c *CommentResp) BindTo(response *comment.CommentResponse) {
 	response.StatusMsg = c.Response.StatusMessage
 }
 
+func (c *CommentResp) BindToCommentList(response *comment.CommentListResponse) {
+	response.StatusCode = c.Response.StatusCode
+	response.StatusMsg = c.Response.StatusMessage
+}
+
 func ResponseSuccess(data interface{}) *CommentResp {
 	resp := errdeal.NewResponse(errdeal.CodeSuccess).WithData(data)
 	return &CommentResp{

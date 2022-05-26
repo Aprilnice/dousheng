@@ -5,12 +5,10 @@ import (
 	comment "dousheng/comment/service"
 	"dousheng/pkg/dao/mysqldb"
 	"dousheng/pkg/snowflaker"
-	"fmt"
 )
 
 //CreateComment 创建评论
 func (*CommentService) CreateComment(ctx context.Context, req *comment.CommentRequest, resp *comment.CommentResponse) (err error) {
-	fmt.Println("create", req)
 	// 初始化Comment
 	commentModel := new(mysqldb.Comment)
 	// 生成commentID

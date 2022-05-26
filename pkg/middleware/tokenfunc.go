@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ContextTokenFunc 获取token的方法 可自己实现
+// ContextTokenFunc 获取token的接口 可自己实现
 type ContextTokenFunc interface {
 	QueryToken(*gin.Context) string
 }
