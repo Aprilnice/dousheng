@@ -13,10 +13,10 @@ const (
 
 // JwtTokenMiddleware token验证的中间件
 // tokenFunc 获取token的方式 已实现从url和form-data中获取token
-func JwtTokenMiddleware(tokenFunc ContextTokenFunc) gin.HandlerFunc {
+func JwtTokenMiddleware(ctf ContextTokenFunc) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 获取请求中的token
-		token := tokenFunc(c)
+		token := ctf.QueryToken(c)
 
 		if len(token) == 0 { // 没有token
 			c.JSON(http.StatusOK, errdeal.NewResponse(errdeal.CodeWithoutTokenErr))

@@ -6,27 +6,44 @@ import (
 )
 
 // ContextTokenFunc 获取token的方法 可自己实现
-type ContextTokenFunc func(*gin.Context) string
+type ContextTokenFunc interface {
+	QueryToken(*gin.Context) string
+}
+
+// 从url中获取token
+type urlToken struct {
+	urlParam string
+}
+
+func (u *urlToken) QueryToken(c *gin.Context) string {
+	return c.Query(u.urlParam)
+}
 
 // URLToken 从URL中获取token
-func URLToken() ContextTokenFunc {
-	return func(c *gin.Context) string {
-		return c.Query("token")
+func URLToken(urlParam string) ContextTokenFunc {
+	return &urlToken{
+		urlParam: urlParam,
 	}
 }
 
-// FormToken 从form-data中获取token
-func FormToken(formKey string) ContextTokenFunc {
-	type tmpToken struct {
+type formToken struct {
+	formParam string // form-data的标识名
+	TokenType *struct {
 		Token string `json:"token"`
 	}
-	return func(c *gin.Context) string {
-		req := c.PostForm(formKey)
-		var tokenRes tmpToken
-		if err := json.Unmarshal([]byte(req), &tokenRes); err != nil {
-			return ""
-		}
-		return tokenRes.Token
-	}
+}
 
+func (f *formToken) QueryToken(c *gin.Context) string {
+	req := c.PostForm(f.formParam)
+	if err := json.Unmarshal([]byte(req), f.TokenType); err != nil {
+		return ""
+	}
+	return f.TokenType.Token
+}
+
+// FormToken 从form-data中获取token
+func FormToken(formParam string) ContextTokenFunc {
+	return &formToken{
+		formParam: formParam,
+	}
 }

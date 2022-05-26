@@ -18,7 +18,7 @@ func Setup() *gin.Engine {
 	// 这里面的业务路由使用到 jwt 验证 中间件
 	{
 		// 评论  从url中获取token
-		r.POST("/dousheng/comment/action", middlewares.JwtTokenMiddleware(middlewares.URLToken()), handler.CommentHandler)
+		r.POST("/dousheng/comment/action", middlewares.JwtTokenMiddleware(middlewares.URLToken("token")), handler.CommentHandler)
 
 		// 点赞
 
