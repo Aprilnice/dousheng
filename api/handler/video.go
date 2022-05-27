@@ -5,12 +5,10 @@ import (
 	"dousheng/api/rpc"
 	"dousheng/pkg/doushengjwt"
 	"dousheng/pkg/errdeal"
-	middlewares "dousheng/pkg/middleware"
 	video "dousheng/video/service"
-	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
+	"net/http"
 	"strconv"
 	"time"
 )
@@ -18,29 +16,36 @@ import (
 // VideoPublishHandler 视频发布
 func VideoPublishHandler(c *gin.Context) {
 	// 获取参数
-	formReq := c.PostForm("req")
-	fmt.Println(formReq)
-	var param VideoPublishParam
-	if err := json.Unmarshal([]byte(formReq), &param); err != nil {
+	param := new(VideoPublishParam)
+	if err := c.ShouldBind(param); err != nil {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("参数解析错误"))
 		return
 	}
 
-	// 获取userid
-	userId, _ := c.Get(middlewares.ContextUserID)
 
-	// 获取视频文件
-	file, fh, err := c.Request.FormFile("file")
-	fmt.Println(fh.Filename)
+	// 获取userid
+	//userId, _ := c.Get(middlewares.ContextUserID)
+
+	//获取解析后表单
+	form, err := c.MultipartForm()
 	if err != nil {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("视频上传错误"))
 		return
 	}
+	//获取视频文件
+	file := form.File["file"][0]
+	fh, err := file.Open()
+	if err != nil {
+		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("视频获取错误"))
+		return
+	}
 
 	// 获得文件二进制流
-	bFile, _ := ioutil.ReadAll(file)
+	bFile, _ := ioutil.ReadAll(fh)
+	fh.Close()
 	req := video.DouyinPublishActionRequest{
-		UserId: userId.(int64),
+		//UserId: userId.(int64),
+		UserId: 0,
 		Title:  param.Title,
 		Data:   bFile,
 	}
@@ -77,6 +82,7 @@ func VideoPlayHandler(c *gin.Context) {
 	// rpc 调用
 	resp, _ := rpc.VideoPlay(context.Background(), &req)
 
+	//c.Header("Content-Type", "video/mp4")
 	c.Header("Content-Type", "application/octet-stream")
 	c.Header("Content-Transfer-Encoding", "binary")
 	c.Writer.Write(resp.Data)
@@ -138,5 +144,10 @@ func GetVideoFeedHandler(c *gin.Context) {
 
 	// 成功
 	response = errdeal.NewResponse(errdeal.CodeErr(resp.StatusCode))
-	HttpResponse(c, response)
+	c.JSON(http.StatusOK, errdeal.FeedResponse{
+		StatusCode:    response.StatusCode,
+		StatusMessage: response.StatusMessage,
+		NextTime: 	   resp.NextTime,
+		VideoList:     resp.VideoList,
+	})
 }
