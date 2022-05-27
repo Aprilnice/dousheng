@@ -18,14 +18,35 @@ func Setup() *gin.Engine {
 	// 这里面的业务路由使用到 jwt 验证 中间件
 	{
 		// 评论  从url中获取token
-		r.POST("/douyin/comment/action", middlewares.JwtTokenMiddleware(middlewares.URLToken("token")), handler.CommentHandler)
-
-		//评论列表
-		// 评论  从url中获取token
+		r.POST("/douyin/comment/action",
+			middlewares.JwtTokenMiddleware(middlewares.URLToken("token")),
+			handler.CommentActionHandler)
 
 		// 点赞
+		//"/douyin/favorite/action/?token=douyin123456&video_id=2&action_type=1"
+		r.POST("/douyin/favorite/action",
+			middlewares.JwtTokenMiddleware(middlewares.URLToken("token")),
+			handler.FavoriteActionHandler)
+		r.GET("/douyin/favorite/list/",
+			middlewares.JwtTokenMiddleware(middlewares.URLToken("token")),
+			handler.FavoriteListHandler)
+
+		// 关注
+		//"/douyin/favorite/list/?token=douyin123456"
+		r.POST("/douyin/relation/action/",
+			middlewares.JwtTokenMiddleware(middlewares.URLToken("token")),
+			handler.RelationActionHandler)
+		// 关注列表
+		r.GET("/douyin/relation/follow/list/",
+			middlewares.JwtTokenMiddleware(middlewares.URLToken("token")),
+			handler.FollowListHandler)
+		// 粉丝列表
+		r.GET("/douyin/relation/follower/list/",
+			middlewares.JwtTokenMiddleware(middlewares.URLToken("token")),
+			handler.FollowerListHandler)
 
 		// 视频发布  从form-data中获取token  formKey : form-data的标识名
+
 		//r.POST("/douyin/publish/action", middlewares.JwtTokenMiddleware(middlewares.FormToken("req")), handler.VideoPublishHandler)
 		// 视频发布 test
 		r.POST("/douyin/publish/action", handler.VideoPublishHandler)
