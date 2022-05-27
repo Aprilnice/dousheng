@@ -16,6 +16,7 @@ func main() {
 	config.ConfInstance().WithServerConfig(constant.ServerVideo)
 	rpc.InitCommentRPC()
 	rpc.InitVideoRPC()
+	rpc.InitUserRPC()
 
 	fmt.Println(config.ConfInstance())
 

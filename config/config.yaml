@@ -39,3 +39,6 @@ server:
   comment:
     name: srv.comment
     address: 127.0.0.1:8088
+  user:
+    name: srv.user
+    address: 127.0.0.1:8888

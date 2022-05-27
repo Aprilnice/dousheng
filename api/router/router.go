@@ -12,8 +12,10 @@ func Setup() *gin.Engine {
 	r := gin.Default()
 
 	// 注册业务路由
+	r.POST("/douyin/user/register/", handler.RegisterHandler)
 
 	// 登录业务路由
+	r.POST("/douyin/user/login/", handler.LoginHandler)
 
 	// 这里面的业务路由使用到 jwt 验证 中间件
 	{

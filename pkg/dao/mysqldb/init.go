@@ -68,5 +68,8 @@ func Migrate() error {
 	if err := migrateVideoInfo(); err != nil {
 		return err
 	}
+	if err := migrateUser(); err != nil {
+		return err
+	}
 	return nil
 }

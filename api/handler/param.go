@@ -22,3 +22,11 @@ type VideoPublishParam struct {
 	// Title 视频标题
 	Title string `json:"title" form:"title"`
 }
+
+//UserRegisterParam 用户注册相关参数
+type UserRegisterParam struct {
+	//用户名
+	Username string `json:"username" binding:"required"`
+	//密码
+	Password string `json:"password" binding:"required"`
+}
