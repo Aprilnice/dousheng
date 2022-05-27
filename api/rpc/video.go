@@ -17,6 +17,7 @@ var rpcVideoService service.VideoModuleService
 // InitVideoRPC 初始化视频服务客户端
 func InitVideoRPC() {
 	fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
+
 	microReg := etcd.NewRegistry(
 		registry.Addrs(config.ConfInstance().EtcdConfig.Address),
 	)
@@ -25,6 +26,7 @@ func InitVideoRPC() {
 		micro.Registry(microReg),
 		micro.Name("rpcVideoModuleClient"),
 	)
+
 	rpcVideo.Init()
 
 	rpcVideoService = service.NewVideoModuleService(

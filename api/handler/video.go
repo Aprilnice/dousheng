@@ -22,17 +22,17 @@ func VideoPublishHandler(c *gin.Context) {
 		return
 	}
 
-
 	// 获取userid
 	//userId, _ := c.Get(middlewares.ContextUserID)
 
-	//获取解析后表单
+	// 获取解析后表单
 	form, err := c.MultipartForm()
 	if err != nil {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("视频上传错误"))
 		return
 	}
-	//获取视频文件
+
+	// 获取视频文件
 	file := form.File["file"][0]
 	fh, err := file.Open()
 	if err != nil {
@@ -42,7 +42,11 @@ func VideoPublishHandler(c *gin.Context) {
 
 	// 获得文件二进制流
 	bFile, _ := ioutil.ReadAll(fh)
+
+	// 关闭文件
 	fh.Close()
+
+	// 绑定参数
 	req := video.DouyinPublishActionRequest{
 		//UserId: userId.(int64),
 		UserId: 0,
@@ -75,6 +79,8 @@ func VideoPlayHandler(c *gin.Context) {
 		return
 	}
 	tmp, _ := strconv.ParseInt(id, 10, 64)
+
+	// 参数绑定
 	req := video.PlayVideoReq{
 		Id: tmp,
 	}
@@ -82,7 +88,6 @@ func VideoPlayHandler(c *gin.Context) {
 	// rpc 调用
 	resp, _ := rpc.VideoPlay(context.Background(), &req)
 
-	//c.Header("Content-Type", "video/mp4")
 	c.Header("Content-Type", "application/octet-stream")
 	c.Header("Content-Transfer-Encoding", "binary")
 	c.Writer.Write(resp.Data)
@@ -115,6 +120,8 @@ func GetVideoFeedHandler(c *gin.Context) {
 	token := c.Query("token")
 	var tmp, id int64
 	id = 0
+
+	// 没传时间用当前时间
 	if latest == "" {
 		tmp = time.Now().UnixMilli()
 	} else {
@@ -126,6 +133,8 @@ func GetVideoFeedHandler(c *gin.Context) {
 		claims, _ := doushengjwt.ParseToken(token)
 		id = claims.UserID
 	}
+
+	// 绑定参数
 	req := video.DouyinFeedRequest{
 		UserId:     id,
 		LatestTime: tmp,
@@ -138,7 +147,11 @@ func GetVideoFeedHandler(c *gin.Context) {
 	var response *errdeal.Response
 	if err != nil {
 		response = errdeal.NewResponse(errdeal.CodeErr(resp.StatusCode)).WithErr(err)
-		HttpResponse(c, response)
+		c.JSON(http.StatusOK, errdeal.FeedResponse{
+			StatusCode:    response.StatusCode,
+			StatusMessage: response.StatusMessage,
+			NextTime: 	   tmp,
+		})
 		return
 	}
 
