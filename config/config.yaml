@@ -19,7 +19,7 @@ mysql:
   host: 127.0.0.1
   port: 3306
   user: root
-  password: 123456
+  password:
   db: dousheng
   default_string_size: 256
   max_open_connection: 200
