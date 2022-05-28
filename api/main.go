@@ -14,6 +14,7 @@ func main() {
 	config.Init("../config")
 	config.ConfInstance().WithServerConfig(constant.ServerComment)
 	config.ConfInstance().WithServerConfig(constant.ServerVideo)
+	config.ConfInstance().WithServerConfig(constant.ServerUser)
 	rpc.InitCommentRPC()
 	rpc.InitVideoRPC()
 	rpc.InitUserRPC()

@@ -9,11 +9,11 @@ import (
 type User struct {
 	gorm.Model
 	//用户名
-	Username string `gorm:"not null"`
+	Username string `gorm:"not null,primary_key"`
 	//密码
 	Password string `gorm:"not null"`
 	//用户id
-	UserID int64 `gorm:"not null,primary_key"`
+	UserID int64 `gorm:"not null"`
 }
 
 func migrateUser() error {
@@ -32,11 +32,16 @@ func (u *User) BindWithReq(req *service.DouyinUserRegisterRequest) error {
 		u.Password = req.GetPassword()
 		return nil
 	}
+
 	return errors.New("model.user: nil pointer reference")
 }
 
 //注册用户
 func UserRegister(user *User) error {
+	gormDB.Where("username = ?", user.Username).First(&user)
+	if user.ID != 0 {
+		return errors.New("same username")
+	}
 	return gormDB.Create(user).Error
 }
 
@@ -44,10 +49,7 @@ func UserLogin(req *service.DouyinUserLoginRequest) bool {
 	username := req.GetUsername()
 	password := req.GetPassword()
 	var user User
-	err := gormDB.Where("username = ?", username).Find(&user)
-	if err != nil {
-		return false
-	}
+	gormDB.Where("username = ?", username).First(&user)
 	return user.Password == password
 }
 

@@ -33,8 +33,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	comment.Run()
-	user.Run()
-	video.VideoRun()
+	go comment.Run()
+	go user.Run()
+	go video.VideoRun()
+	for {
+	}
 
 }

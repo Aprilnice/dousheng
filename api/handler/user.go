@@ -5,18 +5,23 @@ import (
 	"dousheng/api/rpc"
 	"dousheng/pkg/errdeal"
 	user "dousheng/user/service"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
 func RegisterHandler(c *gin.Context) {
-	var param UserRegisterParam
-	if err := c.ShouldBindJSON(&param); err != nil {
-		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("参数解析错误"))
-		return
-	}
+	//var param UserRegisterParam
+	//if err := c.ShouldBindJSON(&param); err != nil {
+	//	HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("参数解析错误"))
+	//	return
+	//}
+	//req := user.DouyinUserRegisterRequest{
+	//	Username: param.Username,
+	//	Password: param.Password,
+	//}
 	req := user.DouyinUserRegisterRequest{
-		Username: param.Username,
-		Password: param.Password,
+		Username: c.Query("username"),
+		Password: c.Query("password"),
 	}
 	if len(req.Username) <= 0 {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("用户名不能为空"))
@@ -28,7 +33,7 @@ func RegisterHandler(c *gin.Context) {
 	}
 	res, err := rpc.Register(context.Background(), &req)
 	if err != nil {
-		response := errdeal.NewResponse(errdeal.CodeErr(res.StatusCode)).WithErr(err)
+		response := errdeal.NewResponse(errdeal.CodeErr(10002)).WithErr(err)
 		HttpResponse(c, response)
 		return
 	}
@@ -38,14 +43,14 @@ func RegisterHandler(c *gin.Context) {
 }
 
 func LoginHandler(c *gin.Context) {
-	var param UserRegisterParam
-	if err := c.ShouldBindJSON(&param); err != nil {
-		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("参数解析错误"))
-		return
-	}
+	//var param UserRegisterParam
+	//if err := c.ShouldBindJSON(&param); err != nil {
+	//	HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("参数解析错误"))
+	//	return
+	//}
 	req := user.DouyinUserLoginRequest{
-		Username: param.Username,
-		Password: param.Password,
+		Username: c.Query("username"),
+		Password: c.Query("password"),
 	}
 	if len(req.Username) <= 0 {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("用户名不能为空"))
@@ -57,11 +62,14 @@ func LoginHandler(c *gin.Context) {
 	}
 	res, err := rpc.Login(context.Background(), &req)
 	if err != nil {
-		response := errdeal.NewResponse(errdeal.CodeErr(res.StatusCode)).WithErr(err)
+		response := errdeal.NewResponse(errdeal.CodeErr(10002)).WithErr(err)
 		HttpResponse(c, response)
 		return
 	}
 	// 成功
+	fmt.Println("1")
 	response := errdeal.NewResponse(errdeal.CodeErr(res.StatusCode))
+	fmt.Println("2")
 	HttpResponse(c, response)
+	fmt.Println("3")
 }

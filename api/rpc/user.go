@@ -2,29 +2,32 @@ package rpc
 
 import (
 	"context"
+	"dousheng/config"
+	"dousheng/pkg/constant"
 	"dousheng/user/service"
-	"fmt"
+	user "dousheng/user/service"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/registry"
 	"github.com/micro/go-micro/v2/registry/etcd"
-	"time"
 )
 
 var rpcUserService service.UserService
 
 func InitUserRPC() {
-	fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
 	microReg := etcd.NewRegistry(
-		registry.Addrs("192.168.141.101:2379"),
+		registry.Addrs(config.ConfInstance().EtcdConfig.Address),
 	)
 
 	rpcUser := micro.NewService(
 		micro.Registry(microReg),
-		micro.Name("userRpcClient"),
+		micro.Name("rpcUserClient"),
 	)
 	rpcUser.Init()
 
-	rpcUserService = service.NewUserService("srv.user", rpcUser.Client())
+	rpcUserService = user.NewUserService(
+		config.ConfInstance().ServerConfig.Server(constant.ServerUser).Name,
+		rpcUser.Client(),
+	)
 
 }
 func Register(ctx context.Context, req *service.DouyinUserRegisterRequest) (resp *service.DouyinUserRegisterResponse, err error) {

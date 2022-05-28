@@ -21,6 +21,7 @@ func (*UserService) Register(ctx context.Context, req *service.DouyinUserRegiste
 		return err
 	}
 	userModel.UserID = res.UserId
+
 	if err = mysqldb.UserRegister(userModel); err != nil {
 		// 出现错误  这里一般都是数据库错误
 		return err

@@ -76,6 +76,6 @@ func (r *Response) WithData(data interface{}) *Response {
 type FeedResponse struct {
 	StatusCode    int32          `json:"code"`
 	StatusMessage string         `json:"message"`
-	NextTime      int64		     `json:"next_time"`
-	VideoList	  []*video.Video `json:"video_list"`
+	NextTime      int64          `json:"next_time"`
+	VideoList     []*video.Video `json:"video_list"`
 }
