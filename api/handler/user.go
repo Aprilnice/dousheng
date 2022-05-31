@@ -10,11 +10,6 @@ import (
 	"strconv"
 )
 
-type loginresp struct {
-	user_id int64
-	token   string
-}
-
 func RegisterHandler(c *gin.Context) {
 	//var param UserRegisterParam
 	//if err := c.ShouldBindJSON(&param); err != nil {
@@ -98,10 +93,15 @@ func UserInfoHandler(c *gin.Context) {
 		return
 	}
 	// 成功
+	UserData := new(errdeal.UserInfo)
+	UserData.Id = res.User.Id
+	UserData.Name = res.User.Name
+	UserData.FollowCount = res.User.FollowCount
+	UserData.FollowerCount = res.User.FollowerCount
+	UserData.IsFollow = res.User.IsFollow
 	c.JSON(http.StatusOK, errdeal.UserResp{
 		StatusCode:    res.StatusCode,
 		StatusMessage: res.StatusMsg,
-		User:          *res.User,
+		User:          UserData,
 	})
-
 }

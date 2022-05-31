@@ -1,7 +1,6 @@
 package errdeal
 
 import (
-	"dousheng/user/service"
 	video "dousheng/video/service"
 	"fmt"
 )
@@ -47,6 +46,14 @@ type Response struct {
 	Data          interface{} `json:"data,omitempty"` // 忽略掉空值
 }
 
+type UserInfo struct {
+	Id            int64  `json:"id" binding:"required"`
+	Name          string `json:"name" binding:"required"`
+	FollowCount   int64  `json:"follow_count" binding:"required"`
+	FollowerCount int64  `json:"follower_count" binding:"required"`
+	IsFollow      bool   `json:"is_follow" binding:"required"`
+}
+
 // NewResponse 创建一个响应 错误码初始化
 func NewResponse(code CodeErr) *Response {
 	return &Response{
@@ -86,8 +93,9 @@ type LoginResponse struct {
 	UserId        int64  `json:"user_id"`
 	Token         string `json:"token"`
 }
+
 type UserResp struct {
-	StatusCode    int32        `json:"status_code"`
-	StatusMessage string       `json:"status_msg"`
-	User          service.User `json:"user"`
+	StatusCode    int32     `json:"status_code"`
+	StatusMessage string    `json:"status_msg"`
+	User          *UserInfo `json:"user"`
 }
