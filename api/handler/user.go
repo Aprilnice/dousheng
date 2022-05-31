@@ -5,9 +5,15 @@ import (
 	"dousheng/api/rpc"
 	"dousheng/pkg/errdeal"
 	user "dousheng/user/service"
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"strconv"
 )
+
+type loginresp struct {
+	user_id int64
+	token   string
+}
 
 func RegisterHandler(c *gin.Context) {
 	//var param UserRegisterParam
@@ -38,8 +44,12 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 	// 成功
-	response := errdeal.NewResponse(errdeal.CodeErr(res.StatusCode))
-	HttpResponse(c, response)
+	c.JSON(http.StatusOK, errdeal.LoginResponse{
+		StatusCode:    res.StatusCode,
+		StatusMessage: res.StatusMsg,
+		UserId:        res.UserId,
+		Token:         res.Token,
+	})
 }
 
 func LoginHandler(c *gin.Context) {
@@ -67,9 +77,31 @@ func LoginHandler(c *gin.Context) {
 		return
 	}
 	// 成功
-	fmt.Println("1")
-	response := errdeal.NewResponse(errdeal.CodeErr(res.StatusCode))
-	fmt.Println("2")
-	HttpResponse(c, response)
-	fmt.Println("3")
+	c.JSON(http.StatusOK, errdeal.LoginResponse{
+		StatusCode:    res.StatusCode,
+		StatusMessage: res.StatusMsg,
+		UserId:        res.UserId,
+		Token:         res.Token,
+	})
+}
+
+func UserInfoHandler(c *gin.Context) {
+	UserId, _ := strconv.Atoi(c.Query("user_id"))
+	req := user.DouyinUserRequest{
+		UserId: int64(UserId),
+		Token:  c.Query("token"),
+	}
+	res, err := rpc.UserInfo(context.Background(), &req)
+	if err != nil {
+		response := errdeal.NewResponse(errdeal.CodeErr(10002)).WithErr(err)
+		HttpResponse(c, response)
+		return
+	}
+	// 成功
+	c.JSON(http.StatusOK, errdeal.UserResp{
+		StatusCode:    res.StatusCode,
+		StatusMessage: res.StatusMsg,
+		User:          *res.User,
+	})
+
 }

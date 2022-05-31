@@ -7,7 +7,6 @@ import (
 	"dousheng/pkg/errdeal"
 	"dousheng/pkg/snowflaker"
 	"dousheng/user/service"
-	"fmt"
 )
 
 func (*UserService) Register(ctx context.Context, req *service.DouyinUserRegisterRequest, res *service.DouyinUserRegisterResponse) (err error) {
@@ -26,7 +25,16 @@ func (*UserService) Register(ctx context.Context, req *service.DouyinUserRegiste
 		// 出现错误  这里一般都是数据库错误
 		return err
 	}
-	fmt.Println("register success")
+	userInfoModel := new(mysqldb.UserInfo)
+	userInfoModel.UserId = userModel.UserID
+	userInfoModel.Name = userModel.Username
+	userInfoModel.FollowerCount = 0
+	userInfoModel.FollowCount = 0
+	userInfoModel.IsFollow = false
+	if err = mysqldb.SetUserInfo(userInfoModel); err != nil {
+		// 出现错误  这里一般都是数据库错误
+		return err
+	}
 	// 成功
 	tmp := errdeal.NewResponse(errdeal.CodeSuccess).WithData("nil")
 	res.StatusCode = tmp.StatusCode

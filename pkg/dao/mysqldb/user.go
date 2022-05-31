@@ -16,6 +16,20 @@ type User struct {
 	UserID int64 `gorm:"not null"`
 }
 
+type UserInfo struct {
+	gorm.Model
+	//用户UserID
+	UserId int64 `gorm:"not null"`
+	//用户名
+	Name string `gorm:"not null"`
+	//关注总数
+	FollowCount int64 `gorm:"not null"`
+	//粉丝总数
+	FollowerCount int64 `gorm:"not null"`
+	//是否关注
+	IsFollow bool `gorm:"not null"`
+}
+
 func migrateUser() error {
 
 	migrator := gormDB.Migrator()
@@ -23,6 +37,14 @@ func migrateUser() error {
 		return nil
 	}
 	return migrator.CreateTable(&User{})
+}
+func migrateUserInfo() error {
+
+	migrators := gormDB.Migrator()
+	if migrators.HasTable(&UserInfo{}) {
+		return nil
+	}
+	return migrators.CreateTable(&UserInfo{})
 }
 
 // BindWithReq 将Req的请求数据绑定到自己的字段里
@@ -43,6 +65,7 @@ func UserRegister(user *User) error {
 		return errors.New("same username")
 	}
 	return gormDB.Create(user).Error
+
 }
 
 func UserLogin(req *service.DouyinUserLoginRequest) bool {
@@ -59,6 +82,15 @@ func GetUserId(name string) int64 {
 	return user.UserID
 }
 
-// UserInfo 用户信息
-type UserInfo struct {
+func SetUserInfo(ui *UserInfo) error {
+	return gormDB.Create(ui).Error
+}
+
+func GetUserInfoById(userId int64) (*UserInfo, error) {
+	var userInfo *UserInfo
+	err := gormDB.Where("user_id = ?", userId).Find(&userInfo).Error
+	if err != nil {
+		return &UserInfo{}, err
+	}
+	return userInfo, nil
 }

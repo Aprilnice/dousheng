@@ -1,6 +1,7 @@
 package errdeal
 
 import (
+	"dousheng/user/service"
 	video "dousheng/video/service"
 	"fmt"
 )
@@ -78,4 +79,15 @@ type FeedResponse struct {
 	StatusMessage string         `json:"message"`
 	NextTime      int64          `json:"next_time"`
 	VideoList     []*video.Video `json:"video_list"`
+}
+type LoginResponse struct {
+	StatusCode    int32  `json:"status_code"`
+	StatusMessage string `json:"status_msg"`
+	UserId        int64  `json:"user_id"`
+	Token         string `json:"token"`
+}
+type UserResp struct {
+	StatusCode    int32        `json:"status_code"`
+	StatusMessage string       `json:"status_msg"`
+	User          service.User `json:"user"`
 }

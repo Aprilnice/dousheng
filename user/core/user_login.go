@@ -3,6 +3,7 @@ package core
 import (
 	"context"
 	"dousheng/pkg/dao/mysqldb"
+	"dousheng/pkg/doushengjwt"
 	"dousheng/pkg/errdeal"
 	"dousheng/user/service"
 	user "dousheng/user/service"
@@ -14,20 +15,18 @@ type UserResp struct {
 }
 
 func (*UserService) Login(ctx context.Context, req *service.DouyinUserLoginRequest, res *service.DouyinUserLoginResponse) (err error) {
-	username := ctx.Value("username")
-	fmt.Println(username)
 	if !mysqldb.UserLogin(req) {
 		// 账号密码错误
 		LoginResponseErr(err).BindTo(res)
 		fmt.Println("user core err :", err)
 		return err
 	}
-	fmt.Println("register success")
 	// 成功
 	tmp := errdeal.NewResponse(errdeal.CodeSuccess).WithData("nil")
 	res.StatusCode = tmp.StatusCode
 	res.StatusMsg = tmp.StatusMessage
 	res.UserId = mysqldb.GetUserId(req.GetUsername())
+	res.Token, _ = doushengjwt.GenerateToken(req.GetUsername(), res.UserId)
 	return nil
 }
 func (c *UserResp) BindTo(response *user.DouyinUserLoginResponse) {

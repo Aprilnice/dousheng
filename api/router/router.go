@@ -17,6 +17,9 @@ func Setup() *gin.Engine {
 	// 登录业务路由
 	r.POST("/douyin/user/login/", handler.LoginHandler)
 
+	//个人界面
+	r.GET("/douyin/user/", handler.UserInfoHandler)
+
 	// 这里面的业务路由使用到 jwt 验证 中间件
 	{
 		// 评论  从url中获取token

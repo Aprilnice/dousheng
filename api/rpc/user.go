@@ -38,3 +38,8 @@ func Login(ctx context.Context, req *service.DouyinUserLoginRequest) (resp *serv
 	resp, err = rpcUserService.Login(ctx, req)
 	return
 }
+
+func UserInfo(ctx context.Context, req *service.DouyinUserRequest) (resp *service.DouyinUserResponse, err error) {
+	resp, err = rpcUserService.UserInfo(ctx, req)
+	return
+}

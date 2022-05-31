@@ -7,6 +7,7 @@ package user;
 service UserService {
    rpc Register (douyin_user_register_request) returns (douyin_user_register_response) {}
    rpc Login (douyin_user_login_request) returns (douyin_user_login_response){}
+   rpc UserInfo(douyin_user_request) returns (douyin_user_response){}
 }
 
 message douyin_user_request {

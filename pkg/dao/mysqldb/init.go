@@ -71,5 +71,8 @@ func Migrate() error {
 	if err := migrateUser(); err != nil {
 		return err
 	}
+	if err := migrateUserInfo(); err != nil {
+		return err
+	}
 	return nil
 }
