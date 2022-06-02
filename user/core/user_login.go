@@ -5,6 +5,7 @@ import (
 	"dousheng/pkg/dao/mysqldb"
 	"dousheng/pkg/doushengjwt"
 	"dousheng/pkg/errdeal"
+	middlewares "dousheng/pkg/middleware"
 	"dousheng/user/service"
 	user "dousheng/user/service"
 	"fmt"
@@ -15,6 +16,8 @@ type UserResp struct {
 }
 
 func (*UserService) Login(ctx context.Context, req *service.DouyinUserLoginRequest, res *service.DouyinUserLoginResponse) (err error) {
+	password := middlewares.Md5Crypt("dousheng")
+	req.Password = password
 	if !mysqldb.UserLogin(req) {
 		// 账号密码错误
 		LoginResponseErr(err).BindTo(res)

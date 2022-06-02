@@ -25,16 +25,22 @@ func RegisterHandler(c *gin.Context) {
 		Password: c.Query("password"),
 	}
 	if len(req.Username) <= 0 {
-		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("用户名不能为空"))
+		c.JSON(http.StatusOK, errdeal.LoginResponse{
+			StatusCode:    int32(errdeal.CodeParamErr),
+			StatusMessage: "用户名不能为空",
+		})
 		return
 	}
 	if len(req.Password) <= 5 {
-		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("密码不能少于6位"))
+		c.JSON(http.StatusOK, errdeal.LoginResponse{
+			StatusCode:    int32(errdeal.CodeParamErr),
+			StatusMessage: "密码不能少于6位",
+		})
 		return
 	}
 	res, err := rpc.Register(context.Background(), &req)
 	if err != nil {
-		response := errdeal.NewResponse(errdeal.CodeErr(10002)).WithErr(err)
+		response := errdeal.NewResponse(errdeal.CodeParamErr).WithData("用户名已重复，请重新输入")
 		HttpResponse(c, response)
 		return
 	}
@@ -58,17 +64,24 @@ func LoginHandler(c *gin.Context) {
 		Password: c.Query("password"),
 	}
 	if len(req.Username) <= 0 {
-		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("用户名不能为空"))
+		c.JSON(http.StatusOK, errdeal.LoginResponse{
+			StatusCode:    int32(errdeal.CodeParamErr),
+			StatusMessage: "用户名不能为空",
+		})
 		return
 	}
 	if len(req.Password) <= 5 {
-		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("密码不能少于6位"))
+		c.JSON(http.StatusOK, errdeal.LoginResponse{
+			StatusCode:    int32(errdeal.CodeParamErr),
+			StatusMessage: "密码不能少于6位",
+		})
 		return
 	}
 	res, err := rpc.Login(context.Background(), &req)
 	if err != nil {
-		response := errdeal.NewResponse(errdeal.CodeErr(10002)).WithErr(err)
-		HttpResponse(c, response)
+		c.JSON(http.StatusOK, errdeal.LoginResponse{
+			StatusCode: int32(errdeal.CodeParamErr),
+		})
 		return
 	}
 	// 成功
@@ -88,8 +101,11 @@ func UserInfoHandler(c *gin.Context) {
 	}
 	res, err := rpc.UserInfo(context.Background(), &req)
 	if err != nil {
-		response := errdeal.NewResponse(errdeal.CodeErr(10002)).WithErr(err)
-		HttpResponse(c, response)
+		c.JSON(http.StatusOK, errdeal.UserResp{
+			StatusCode:    int32(errdeal.CodeParamErr),
+			StatusMessage: res.StatusMsg,
+			User:          nil,
+		})
 		return
 	}
 	// 成功

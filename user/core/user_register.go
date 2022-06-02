@@ -5,6 +5,7 @@ import (
 	"dousheng/pkg/dao/mysqldb"
 	"dousheng/pkg/doushengjwt"
 	"dousheng/pkg/errdeal"
+	middlewares "dousheng/pkg/middleware"
 	"dousheng/pkg/snowflaker"
 	"dousheng/user/service"
 )
@@ -16,13 +17,17 @@ func (*UserService) Register(ctx context.Context, req *service.DouyinUserRegiste
 	if err != nil {
 		return err
 	}
+	password := middlewares.Md5Crypt("dousheng")
+	req.Password = password
 	if err = userModel.BindWithReq(req); err != nil {
 		return err
 	}
 	userModel.UserID = res.UserId
-
+	// 出现错误  这里一般都是数据库错误
 	if err = mysqldb.UserRegister(userModel); err != nil {
-		// 出现错误  这里一般都是数据库错误
+		tmp := errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("用户名已存在，请重新输入")
+		res.StatusCode = tmp.StatusCode
+		res.StatusMsg = tmp.StatusMessage
 		return err
 	}
 	userInfoModel := new(mysqldb.UserInfo)
