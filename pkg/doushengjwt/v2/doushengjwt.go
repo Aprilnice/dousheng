@@ -9,7 +9,7 @@ import (
 
 var (
 	// token过期时间 24小时 * 天
-	tokenExpireDuration = 24 * time.Hour * time.Duration(config.ConfInstance().DurationConfig.Token)
+	tokenExpireDuration = 24 * time.Hour * time.Duration(config.Instance().DurationConfig.Token)
 	// 秘钥
 	secret = []byte("dousheng")
 	// 签发人

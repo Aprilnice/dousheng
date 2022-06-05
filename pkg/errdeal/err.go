@@ -1,7 +1,7 @@
 package errdeal
 
 import (
-	video "dousheng/video/service"
+	video "dousheng/cmd/video/service"
 	"fmt"
 )
 

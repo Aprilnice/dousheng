@@ -20,6 +20,7 @@ type (
 		*ServerConfig
 		*LogConfig
 		*MySQLConfig
+		*RedisConfig
 		*BaseConfig
 		*EtcdConfig
 		*DurationConfig
@@ -33,7 +34,6 @@ type (
 		Version   string `mapstructure:"version"`
 		StartTime string `mapstructure:"start_time"`
 		Port      string `mapstructure:"port"`
-		MachineID int64  `mapstructure:"machine_id"`
 	}
 
 	// DurationConfig 过期时间相关的配置
@@ -69,6 +69,14 @@ type (
 		DefaultStringSize uint   `mapstructure:"default_string_size"`
 	}
 
+	RedisConfig struct {
+		PoolSize int    `mapstructure:"pool_size"`
+		Port     int    `mapstructure:"port"`
+		DB       int    `mapstructure:"db"`
+		Host     string `mapstructure:"host"`
+		Password string `mapstructure:"password"`
+	}
+
 	// EtcdConfig etcd配置
 	EtcdConfig struct {
 		// address 服务地址
@@ -80,6 +88,8 @@ type (
 		Name string
 		// address 服务地址
 		Address string
+		// 机器地址
+		MachineID int64 `mapstructure:"machine_id"`
 	}
 
 	// ServerConfig 配置服务
@@ -149,9 +159,20 @@ func (c *Config) WithMySQLConfig() *Config {
 	mysqlConf := MySQLConfig{}
 	err := c.vp.UnmarshalKey("mysql", &mysqlConf)
 	if err != nil {
-		log.Fatalf("读取数据库配置文件失败:%v\n", err)
+		log.Fatalf("读取Mysql数据库配置文件失败:%v\n", err)
 	}
 	c.MySQLConfig = &mysqlConf
+	return c
+}
+
+// WithRedisConfig 初始化MySQL数据库配置
+func (c *Config) WithRedisConfig() *Config {
+	redisConf := RedisConfig{}
+	err := c.vp.UnmarshalKey("redis", &redisConf)
+	if err != nil {
+		log.Fatalf("读取Redis数据库配置文件失败:%v\n", err)
+	}
+	c.RedisConfig = &redisConf
 	return c
 }
 
@@ -202,10 +223,12 @@ func (c *Config) WithDurationConfig() *Config {
 
 func Init(path string) {
 	once.Do(func() {
-		conf = NewConfig(path).WithBaseConfig().WithLogConfig().WithMySQLConfig().WithEtcdConfig().WithDurationConfig()
+		conf = NewConfig(path).WithBaseConfig().WithLogConfig().
+			WithMySQLConfig().WithRedisConfig().
+			WithEtcdConfig().WithDurationConfig()
 	})
 }
 
-func ConfInstance() *Config {
+func Instance() *Config {
 	return conf
 }

@@ -3,9 +3,8 @@ base:
   name: dousheng
   mode: dev
   port: 8080
-  host: 127.0.0.1
+  host: 192.168.31.90
   start_time: 2022-05-01
-  machine_id: 1
 
 log:
   savePath: log_out/
@@ -19,26 +18,35 @@ mysql:
   host: 127.0.0.1
   port: 3306
   user: root
-  password:
+  password: 123456
   db: dousheng
   default_string_size: 256
   max_open_connection: 200
   max_idle_connecrtion: 50
 
-etcd:
-  address: 127.0.0.1:2379
+redis:
+  host: 192.168.141.101
+  port: 6379
+  db: 1
+  password:
+  pool_size: 100
 
+etcd:
+  address: 192.168.141.101:2379
 
 duration:
-  token: 7
+  token: 90
 
 server:
   video:
+    machine_id: 1
     name: srv.video
-    address: 127.0.0.1:8100
+    address: 127.0.0.1:8920
   comment:
+    machine_id: 2
     name: srv.comment
-    address: 127.0.0.1:8088
+    address: 127.0.0.1:8910
   user:
+    machine_id: 3
     name: srv.user
-    address: 127.0.0.1:8888
+    address: 127.0.0.1:8970

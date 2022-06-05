@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option go_package = "../service;favorite";
+
+package favorite;
+
+message FavoriteActionRequest{
+
+  string token = 1;   // 用户鉴权
+  int64 user_id = 2;
+  int64 video_id = 3;  // 视频id
+  int32 action_type = 4;  // 1 点赞 2 取消
+}
+
+message FavoriteActionResponse{
+  int32 status_code = 1; // 状态码0成功
+  string status_msg = 2;  // 状态描述
+}
+
+
+message FavoriteListRequest{
+  string token = 1;   // 用户鉴权
+  int64 user_id = 2;
+}
+
+message FavoriteListResponse{
+  int32 status_code = 1; // 状态码0成功
+  string status_msg = 2;  // 状态描述
+  repeated Video video_list = 3; // 点赞视频的列表
+}
+
+// Video 视频详情
+message Video {
+  int64 id = 1; // 视频唯一标识
+  User author = 2; // 视频作者信息
+  string play_url = 3; // 视频播放地址
+  string cover_url = 4; // 视频封面地址
+  int64 favorite_count = 5; // 视频的点赞总数
+  int64 comment_count = 6; // 视频的评论总数
+  bool is_favorite = 7; // true-已点赞，false-未点赞
+  string title = 8; // 视频标题
+}
+
+message User {
+  int64 id = 1;  //用户id
+  string name = 2; //用户名称
+  int64 follow_count = 3; //关注总数
+  int64 follower_count = 4;//粉丝总数
+  bool is_follow = 5;  // true-已关注，false-未关注
+}
+
+
+service Favorite {
+  rpc FavoriteAction(FavoriteActionRequest) returns (FavoriteActionResponse);
+  rpc FavoriteList(FavoriteListRequest) returns (FavoriteListResponse);
+}

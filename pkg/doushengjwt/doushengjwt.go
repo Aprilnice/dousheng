@@ -64,7 +64,7 @@ func ParseToken(token string) (*DouShengClaims, error) {
 // 获取过期时间
 func tokenExpiresAt() int64 {
 	once.Do(func() {
-		tokenExpireDuration = 24 * time.Hour * time.Duration(config.ConfInstance().DurationConfig.Token)
+		tokenExpireDuration = 24 * time.Hour * time.Duration(config.Instance().DurationConfig.Token)
 	})
 	return time.Now().Add(tokenExpireDuration).Unix()
 }
