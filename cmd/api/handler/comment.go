@@ -43,13 +43,15 @@ func CommentListHandler(c *gin.Context) {
 	resp, err := commentService.CommentList(context.Background(), &req)
 
 	if err != nil {
-		HttpResponse(c, errdeal.NewResponse(errdeal.CodeServiceErr).WithErr(err))
+		HttpResponse(c, resp)
 		return
 	}
 
 	fmt.Println(resp.CommentList)
+	fmt.Println(resp.StatusCode)
+	fmt.Println(resp.StatusMsg)
 
-	HttpResponse(c, errdeal.NewResponse(errdeal.CodeSuccess).WithData(resp.CommentList))
+	HttpResponse(c, resp)
 
 }
 
@@ -71,7 +73,7 @@ func CommentActionHandler(c *gin.Context) {
 		uid = uidStr.(int64)
 	}
 
-	req := comment.CommentRequest{
+	req := comment.CommentActionRequest{
 		UserId:      uid,
 		Token:       commentVar.Token,
 		VideoId:     commentVar.VideoId,
@@ -91,8 +93,8 @@ func CommentActionHandler(c *gin.Context) {
 
 }
 
-func createCommentHandler(c *gin.Context, req *comment.CommentRequest) {
-	var response *errdeal.Response
+func createCommentHandler(c *gin.Context, req *comment.CommentActionRequest) {
+
 	if len(req.CommentText) <= 0 {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("评论不能为空"))
 		return
@@ -100,35 +102,27 @@ func createCommentHandler(c *gin.Context, req *comment.CommentRequest) {
 
 	// 取出实例
 	commentService := c.Keys[constant.ClientComment].(comment.DyCommentService)
-
 	// rpc 调用
 	resp, err := commentService.CreateComment(context.Background(), req)
 
 	if err != nil {
 		fmt.Println(err)
-		response = errdeal.NewResponse(errdeal.CodeErr(resp.StatusCode)).WithErr(err)
-		HttpResponse(c, response)
+		HttpResponse(c, resp)
 		return
 	}
-	// 成功
-	response = errdeal.NewResponse(errdeal.CodeErr(resp.StatusCode))
-	HttpResponse(c, response)
+	HttpResponse(c, resp)
 }
 
-func deleteCommentHandler(c *gin.Context, req *comment.CommentRequest) {
+func deleteCommentHandler(c *gin.Context, req *comment.CommentActionRequest) {
 	// 声明一个response
-	var response *errdeal.Response
 
 	// 取出实例
 	commentService := c.Keys[constant.ClientComment].(comment.DyCommentService)
 	// rpc 调用
 	resp, err := commentService.DeleteComment(context.Background(), req)
 	if err != nil {
-		response = errdeal.NewResponse(errdeal.CodeErr(resp.StatusCode)).WithErr(err)
-		HttpResponse(c, response)
+		HttpResponse(c, resp)
 		return
 	}
-	response = errdeal.NewResponse(errdeal.CodeErr(resp.StatusCode))
-	HttpResponse(c, response)
-	fmt.Println(resp)
+	HttpResponse(c, resp)
 }

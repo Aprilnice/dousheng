@@ -4,8 +4,10 @@ import (
 	"context"
 	"dousheng/cmd/video/dal/mysqldb"
 	video "dousheng/cmd/video/service"
+	"dousheng/config"
 	"dousheng/pkg/errdeal"
 	"dousheng/pkg/snowflaker"
+	"fmt"
 	"io/ioutil"
 	"strconv"
 	"time"
@@ -24,12 +26,19 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 		return err
 	}
 
+	// 拼接播放地址
+	playURL := fmt.Sprintf("%s:%s/play/?video_id=%s",
+		config.Instance().BaseConfig.Host, // "192.168.43.241"
+		config.Instance().BaseConfig.Port,
+		strconv.FormatInt(videoId, 10),
+	)
+
 	// 获取视频信息
 	videoModule := &mysqldb.VideoInfo{
 		Id:            videoId,
 		Title:         req.Title,
 		AuthorId:      req.UserId,
-		PlayUrl:       "http://1.14.74.79:8080/play/?video_id=" + strconv.FormatInt(videoId, 10),
+		PlayUrl:       playURL, // 播放地址
 		CoverUrl:      "",
 		FavoriteCount: 0,
 		CommentCount:  0,
@@ -45,7 +54,7 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 	}
 
 	// 成功
-	tmp := errdeal.NewResponse(errdeal.CodeSuccess).WithData("nil")
+	tmp := errdeal.NewResponse(errdeal.CodeSuccess)
 	resp.StatusCode = tmp.StatusCode
 	resp.StatusMsg = tmp.StatusMessage
 	return nil

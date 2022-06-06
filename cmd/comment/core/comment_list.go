@@ -4,19 +4,18 @@ import (
 	"context"
 	"dousheng/cmd/comment/dal/mysqldb"
 	"dousheng/cmd/comment/service"
-	"dousheng/pkg/errdeal"
 )
 
 // CommentList 获取评论列表
 func (*CommentService) CommentList(ctx context.Context, req *comment.CommentListRequest, resp *comment.CommentListResponse) (err error) {
 	lists, err := mysqldb.CommentListByVideoID(req.VideoId)
 	if err != nil {
-		ResponseErr(err).BindToCommentList(resp)
+		ResponseError(err).CommentListResponse(resp)
 		return err
 	}
 	ids, err := mysqldb.CommentUserIDByVideoID(req.VideoId)
 	if err != nil {
-		ResponseErr(err).BindToCommentList(resp)
+		ResponseError(err).CommentListResponse(resp)
 		return err
 	}
 	var users = make(map[int64]*comment.User, len(ids))
@@ -37,8 +36,7 @@ func (*CommentService) CommentList(ctx context.Context, req *comment.CommentList
 		commentLists[i] = &c
 	}
 
-	resp.StatusCode = int32(errdeal.CodeSuccess)
-	resp.StatusMsg = errdeal.CodeSuccess.Message()
-	resp.CommentList = commentLists
+	ResponseSuccess().CommentListResponse(resp)
+	resp.CommentList = commentLists // 填充数据
 	return nil
 }

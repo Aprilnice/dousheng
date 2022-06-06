@@ -8,13 +8,13 @@ import (
 )
 
 //DeleteComment 删除评论
-func (*CommentService) DeleteComment(ctx context.Context, req *comment.CommentRequest, resp *comment.CommentResponse) (err error) {
+func (*CommentService) DeleteComment(ctx context.Context, req *comment.CommentActionRequest, resp *comment.CommentActionResponse) (err error) {
 	fmt.Println("delete", req)
 
 	if err = mysqldb.DeleteComment(req.GetCommentId()); err != nil {
-		ResponseErr(err).BindTo(resp)
+		ResponseError(err).CommentActionResponse(resp)
 		return err
 	}
-	ResponseSuccess(nil).BindTo(resp)
+	ResponseSuccess().CommentActionResponse(resp)
 	return nil
 }
