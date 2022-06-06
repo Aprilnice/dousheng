@@ -3,7 +3,7 @@ base:
   name: dousheng
   mode: dev
   port: 8080
-  host: 192.168.31.90
+  host: 1.14.74.79
   start_time: 2022-05-01
 
 log:
@@ -25,14 +25,14 @@ mysql:
   max_idle_connecrtion: 50
 
 redis:
-  host: 192.168.141.101
+  host: 127.0.0.1
   port: 6379
   db: 1
   password:
   pool_size: 100
 
 etcd:
-  address: 192.168.141.101:2379
+  address: 127.0.0.1:2379
 
 duration:
   token: 90

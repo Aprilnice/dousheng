@@ -55,10 +55,9 @@ func Setup() *gin.Engine {
 			handler2.FollowerListHandler)
 
 		// 视频发布  从form-data中获取token  formKey : form-data的标识名
-
-		//r.POST("/douyin/publish/action", middlewares.JwtTokenMiddleware(middlewares.FormToken("req")), handler.VideoPublishHandler)
+		r.POST("/douyin/publish/action/", middlewares.JwtTokenMiddleware(middlewares.FormToken("token")), handler2.VideoPublishHandler)
 		// 视频发布 test
-		r.POST("/douyin/publish/action", handler2.VideoPublishHandler)
+		//r.POST("/douyin/publish/action/", handler2.VideoPublishHandler)
 
 	}
 	// 视频播放

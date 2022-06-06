@@ -29,7 +29,7 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 		Id:            videoId,
 		Title:         req.Title,
 		AuthorId:      req.UserId,
-		PlayUrl:       "http://192.168.31.90:8080/play/?video_id=" + strconv.FormatInt(videoId, 10),
+		PlayUrl:       "http://1.14.74.79:8080/play/?video_id=" + strconv.FormatInt(videoId, 10),
 		CoverUrl:      "",
 		FavoriteCount: 0,
 		CommentCount:  0,

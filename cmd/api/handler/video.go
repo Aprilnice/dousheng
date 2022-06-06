@@ -6,6 +6,7 @@ import (
 	"dousheng/pkg/constant"
 	"dousheng/pkg/doushengjwt"
 	"dousheng/pkg/errdeal"
+	middlewares "dousheng/pkg/middleware"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
@@ -15,15 +16,9 @@ import (
 
 // VideoPublishHandler 视频发布
 func VideoPublishHandler(c *gin.Context) {
-	// 获取参数
-	param := new(VideoPublishParam)
-	if err := c.ShouldBind(param); err != nil {
-		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("参数解析错误"))
-		return
-	}
 
 	// 获取userid
-	//userId, _ := c.Get(middlewares.ContextUserID)
+	userId := c.GetInt64(middlewares.ContextUserID)
 
 	// 获取解析后表单
 	form, err := c.MultipartForm()
@@ -33,7 +28,7 @@ func VideoPublishHandler(c *gin.Context) {
 	}
 
 	// 获取视频文件
-	file := form.File["file"][0]
+	file := form.File["data"][0]
 	fh, err := file.Open()
 	if err != nil {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("视频获取错误"))
@@ -48,9 +43,8 @@ func VideoPublishHandler(c *gin.Context) {
 
 	// 绑定参数
 	req := video.DouyinPublishActionRequest{
-		//UserId: userId.(int64),
-		UserId: 0,
-		Title:  param.Title,
+		UserId: userId,
+		Title:  (form.Value)["title"][0],
 		Data:   bFile,
 	}
 

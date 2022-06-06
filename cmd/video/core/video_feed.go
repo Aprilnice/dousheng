@@ -5,14 +5,13 @@ import (
 	"dousheng/cmd/video/dal/mysqldb"
 	video "dousheng/cmd/video/service"
 	"dousheng/pkg/errdeal"
-	"fmt"
 )
 
 // VideoFeed 视频流
 func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedRequest, resp *video.DouyinFeedResponse) (err error) {
 	// 游客状态下均为false
-	//like := false
-	//follow := false
+	like := false
+	follow := false
 
 	// 获取视频信息
 	videos, err := mysqldb.GetVideoFeed(req.LatestTime)
@@ -26,33 +25,27 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 	tmp := new(video.Video)
 	for i := range videos {
 		// 登录状态
-		//if req.UserId != 0 {
-		//	// 获取like和follow
-		//	// like =
-		//	// follow =
-		//}
-		//tmp.IsFavorite = like
+		if req.UserId != 0 {
+			// 获取like和follow
+
+			like = true
+			follow = true
+		}
+		tmp.IsFavorite = like
 
 		// 获取视频作者信息
-		//author,err := mysqldb.GetUserInfo((*videos)[i].AuthorId)
-		//if err != nil {
-		//	ResponseFeedErr(err, resp)
-		//	resp.NextTime = req.LatestTime
-		//	return err
-		//}
-		//tmp.Author = &video.User{
-		//	Id: author.Id,
-		//	Name: author.Name,
-		//	FollowCount: author.FollowCount,
-		//	FollowerCount: author.FollowerCount,
-		//	IsFollow: follow,
-		//}
-		author := &video.User{
-			Id:            0,
-			Name:          "test",
-			FollowerCount: 0,
-			FollowCount:   0,
-			IsFollow:      false,
+		author,err := mysqldb.GetUserInfo(videos[i].AuthorId)
+		if err != nil {
+			ResponseFeedErr(err, resp)
+			resp.NextTime = req.LatestTime
+			return err
+		}
+		tmp.Author = &video.User{
+			Id: author.UserId,
+			Name: author.Name,
+			FollowCount: author.FollowCount,
+			FollowerCount: author.FollowerCount,
+			IsFollow: follow,
 		}
 
 		tmp = &video.Video{
@@ -61,7 +54,6 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 			CoverUrl:      "",
 			FavoriteCount: videos[i].FavoriteCount,
 			CommentCount:  videos[i].CommentCount,
-			Author:        author,
 		}
 
 		// 添加至返回的视频列表中
@@ -71,8 +63,6 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 	resp.StatusCode = 0
 	resp.StatusMsg = "Success"
 	resp.NextTime = videos[len(videos)-1].PublishTime
-	fmt.Print("resp=")
-	fmt.Println(resp)
 	return nil
 }
 

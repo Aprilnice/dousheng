@@ -2,7 +2,6 @@ package mysqldb
 
 import (
 	userInfo "dousheng/cmd/user/dal/mysqldb"
-	video "dousheng/cmd/video/service"
 )
 
 // VideoInfo 视频信息表
@@ -32,14 +31,12 @@ func PublishVideo(video *VideoInfo) error {
 
 // GetVideoFeed 获取feed流
 func GetVideoFeed(latestTime int64) (videos []VideoInfo, err error) {
-	//err = gormDB.Table("t_video_infos").Where("publish_time <= ?",latestTime).Limit(30).Find(videos).Error
-	err = gormDB.Table("t_video_infos").Find(&videos).Error
+	err = gormDB.Table("t_video_infos").Where("publish_time <= ?",latestTime).Order("publish_time desc").Limit(30).Find(&videos).Error
 	return videos, err
 }
 
 // GetUserInfo 获取用户信息
-func GetUserInfo(userId int64) (user *video.User, err error) {
-	u := new(userInfo.UserInfo)
-	err = gormDB.Model(u).Where("id = ?", userId).Find(user).Error
+func GetUserInfo(userId int64) (user userInfo.UserInfo, err error) {
+	err = gormDB.Table("t_user_infos").Where("user_id = ?", userId).Find(&user).Error
 	return user, err
 }

@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"encoding/json"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,10 +33,11 @@ type formToken struct {
 }
 
 func (f *formToken) QueryToken(c *gin.Context) string {
-	req := c.PostForm(f.formParam)
+	token := c.PostForm(f.formParam)
 	// 反序列化到结构体中 即便出错 token默认值为 “”
-	_ = json.Unmarshal([]byte(req), f.TokenType)
-	return f.TokenType.Token
+	//_ = json.Unmarshal([]byte(req), f.TokenType)
+	//return f.TokenType.Token
+	return token
 }
 
 // FormToken 从form-data中获取token
