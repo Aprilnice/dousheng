@@ -4,7 +4,7 @@ option go_package = "../service;comment";
 
 package comment;
 
-message CommentRequest{
+message CommentActionRequest{
   int64 user_id = 1; // 用户id
   string token = 2;   // 用户鉴权
   int64 video_id = 3;  // 视频id
@@ -13,7 +13,7 @@ message CommentRequest{
   int64 comment_id = 6;  // 评论id 删除评论时使用
 }
 
-message CommentResponse{
+message CommentActionResponse{
   int32 status_code = 1; // 状态码0成功
   string status_msg = 2;  // 状态描述
 }
@@ -46,7 +46,7 @@ message User {
 }
 
 service DyComment {
-  rpc CreateComment(CommentRequest) returns (CommentResponse);
-  rpc DeleteComment(CommentRequest) returns (CommentResponse);
+  rpc CreateComment(CommentActionRequest) returns (CommentActionResponse);
+  rpc DeleteComment(CommentActionRequest) returns (CommentActionResponse);
   rpc CommentList(CommentListRequest) returns (CommentListResponse);
 }

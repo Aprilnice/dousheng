@@ -41,9 +41,8 @@ func (c CodeErr) Error() string {
 // StatusCode:    自定义的响应码
 // StatusMessage: 响应码绑定的错误消息
 type Response struct {
-	StatusCode    int32       `json:"code"`
-	StatusMessage string      `json:"message"`
-	Data          interface{} `json:"data,omitempty"` // 忽略掉空值
+	StatusCode    int32  `json:"code"`
+	StatusMessage string `json:"message"`
 }
 
 type UserInfo struct {
@@ -71,12 +70,6 @@ func (r *Response) WithMsg(msg string) *Response {
 // WithErr 自定义错误消息
 func (r *Response) WithErr(err error) *Response {
 	r.StatusMessage = err.Error()
-	return r
-}
-
-// WithData 数据
-func (r *Response) WithData(data interface{}) *Response {
-	r.Data = data
 	return r
 }
 

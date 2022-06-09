@@ -3,7 +3,7 @@ base:
   name: dousheng
   mode: dev
   port: 8080
-  host: 1.14.74.79
+  host: 192.168.43.241
   start_time: 2022-05-01
 
 log:

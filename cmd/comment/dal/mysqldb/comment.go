@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type Comment struct {
+type CommentAction struct {
 	ID uint `gorm:"primarykey"`
 
 	CreatedAt time.Time
@@ -31,7 +31,7 @@ type CommentList struct {
 }
 
 // BindWithReq 将Req的请求数据绑定到自己的字段里
-func (c *Comment) BindWithReq(req *comment.CommentRequest) error {
+func (c *CommentAction) BindWithReq(req *comment.CommentActionRequest) error {
 	if c != nil {
 		c.UserID = req.UserId
 		c.VideoID = req.VideoId
@@ -43,13 +43,13 @@ func (c *Comment) BindWithReq(req *comment.CommentRequest) error {
 }
 
 // CreateComment 创建一条评论
-func CreateComment(comment *Comment) error {
+func CreateComment(comment *CommentAction) error {
 	return gormDB.Create(comment).Error
 }
 
 // DeleteComment 删除评论
 func DeleteComment(commentID int64) error {
-	return gormDB.Unscoped().Where("comment_id = ?", commentID).Delete(&Comment{}).Error
+	return gormDB.Unscoped().Where("comment_id = ?", commentID).Delete(&CommentAction{}).Error
 }
 
 // QueryCommentNumsByVideID 查询某条视频的评论数
@@ -57,8 +57,8 @@ func QueryCommentNumsByVideID(videoID int64) int64 {
 	return gormDB.Where(map[string]interface{}{"VideoID": videoID}).RowsAffected
 }
 
-func CommentListByVideoID(videoID int64) ([]*Comment, error) {
-	var commentList []*Comment
+func CommentListByVideoID(videoID int64) ([]*CommentAction, error) {
+	var commentList []*CommentAction
 
 	err := gormDB.Select([]string{"created_at", "comment_id", "user_id", "comment_text"}).Order("created_at desc").
 		Where("video_id = ?", videoID).Find(&commentList).Error
