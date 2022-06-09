@@ -38,7 +38,10 @@ func Init() {
 	}
 
 	// 初始化redis
-	redisdb.InitRedisClient(config.Instance().RedisConfig)
+	if err := redisdb.InitRedisClient(config.Instance().RedisConfig); err != nil {
+		log.Println("redis数据库初始化失败")
+		log.Fatal(err)
+	}
 }
 
 func main() {

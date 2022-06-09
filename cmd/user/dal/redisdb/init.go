@@ -15,14 +15,10 @@ var (
 )
 
 // InitRedisClient 初始化redis客户端
-func InitRedisClient(cfg *config.RedisConfig) (err error) {
+func InitRedisClient(cfg *config.RedisConfig) {
 	rdb = redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%v:%v", cfg.Host, cfg.Port),
 		Password: cfg.Password,
 		DB:       cfg.DB,
 	})
-
-	_, err = rdb.Ping(ctx).Result()
-
-	return
 }
