@@ -16,7 +16,7 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 
 	// 从redis获取视频信息
 	videos, err := redisdb.GetFeed(req.LatestTime)
-	if err != nil {
+	if err != nil || len(videos) == 0 {
 
 		// 从MySQL获取视频信息
 		videos, err = mysqldb.GetVideoFeed(req.LatestTime)

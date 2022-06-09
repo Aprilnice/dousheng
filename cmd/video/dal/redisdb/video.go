@@ -56,10 +56,12 @@ func GetFeed(latestTime int64) (videos []mysqldb.VideoInfo, err error) {
 	// 获取视频列表中视频的id
 	videoList, err := rdb.ZRevRangeByScore(
 		ctx,
-		"videoFeed",
+		"VideoFeed",
 		&redis.ZRangeBy{
 			Min: "-inf",
 			Max: strconv.FormatInt(latestTime, 10),
+			Offset: 0,
+			Count: 30,
 		},
 	).Result()
 
