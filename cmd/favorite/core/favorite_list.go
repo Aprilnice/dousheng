@@ -16,6 +16,14 @@ func (*FavoriteService) FavoriteList(ctx context.Context, req *favorite.Favorite
 	resp *favorite.FavoriteListResponse) (err error) {
 	videoIds := favoriteRDB.FavoriteVideosID(req.UserId)
 	if len(videoIds) == 0 { // 无点赞
+		videoIds, err = favoriteDB.FavoriteVideosID(req.UserId)
+
+		if err != nil {
+			ResponseError(err).FavoriteListResponse(resp)
+		}
+	}
+	// 真的没点赞
+	if len(videoIds) == 0 {
 		ResponseSuccess().FavoriteListResponse(resp)
 		return nil
 	}

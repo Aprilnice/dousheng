@@ -80,3 +80,4 @@ func (*CommentService) CommentList(ctx context.Context, req *comment.CommentList
 	fmt.Println(resp.CommentList)
 	return nil
 }
+

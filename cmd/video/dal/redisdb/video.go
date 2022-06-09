@@ -10,7 +10,7 @@ import (
 
 // AddVideoInfo redis中使用Hash存储视频信息
 func AddVideoInfo(video *mysqldb.VideoInfo) error {
-	return 	rdb.HSet(
+	return rdb.HSet(
 		ctx,
 		// key值为视频id
 		rediskey.NewRedisKey(rediskey.KeyVideoHash, strconv.FormatInt(video.Id, 10)),
@@ -59,10 +59,10 @@ func GetFeed(latestTime int64) (videos []mysqldb.VideoInfo, err error) {
 		ctx,
 		rediskey.NewRedisKey(rediskey.KeyFeedZSet),
 		&redis.ZRangeBy{
-			Min: "-inf",
-			Max: strconv.FormatInt(latestTime, 10),
+			Min:    "-inf",
+			Max:    strconv.FormatInt(latestTime, 10),
 			Offset: 0,
-			Count: 30,
+			Count:  30,
 		},
 	).Result()
 
@@ -81,7 +81,7 @@ func GetFeed(latestTime int64) (videos []mysqldb.VideoInfo, err error) {
 			rediskey.NewRedisKey(rediskey.KeyVideoHash, videoList[i]),
 		).Result()
 		if err != nil {
-			return videos,err
+			return videos, err
 		}
 
 		// 提取信息
