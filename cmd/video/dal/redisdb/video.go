@@ -98,6 +98,19 @@ func GetFeed(latestTime int64) (videos []mysqldb.VideoInfo, err error) {
 	return videos, nil
 }
 
+// JudgeUser 判断作者信息是否在redis中
+func JudgeUser(userId int64) bool {
+	result, _ := rdb.HGetAll(
+		ctx,
+		rediskey.NewRedisKey(rediskey.KeyUserHash, strconv.FormatInt(userId, 10)),
+	).Result()
+	if len(result) == 0 {
+		return false
+	}else {
+		return true
+	}
+}
+
 // AddUserInfo 向redis中添加用户信息
 func AddUserInfo(user userInfo.UserInfo) error {
 	return 	rdb.HSet(
