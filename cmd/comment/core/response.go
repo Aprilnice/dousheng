@@ -35,7 +35,7 @@ func ResponseError(err error) *CommentResp {
 
 func ResponseSuccess() *CommentResp {
 	return &CommentResp{
-		errdeal.NewResponse(errdeal.CodeSuccess),
+		Response: errdeal.NewResponse(errdeal.CodeSuccess),
 	}
 
 }

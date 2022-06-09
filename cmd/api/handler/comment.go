@@ -107,9 +107,10 @@ func createCommentHandler(c *gin.Context, req *comment.CommentActionRequest) {
 
 	if err != nil {
 		fmt.Println(err)
-		HttpResponse(c, resp)
+		HttpResponse(c, errdeal.NewResponse(errdeal.CodeServiceErr))
 		return
 	}
+	fmt.Println("resp: ", resp.StatusCode, resp.StatusMsg)
 	HttpResponse(c, resp)
 }
 
@@ -121,7 +122,7 @@ func deleteCommentHandler(c *gin.Context, req *comment.CommentActionRequest) {
 	// rpc 调用
 	resp, err := commentService.DeleteComment(context.Background(), req)
 	if err != nil {
-		HttpResponse(c, resp)
+		HttpResponse(c, errdeal.NewResponse(errdeal.CodeServiceErr))
 		return
 	}
 	HttpResponse(c, resp)
