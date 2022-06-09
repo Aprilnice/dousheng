@@ -136,8 +136,8 @@ func QueryAuthorsInfo(videoIds []string, ch chan<- int) ([]*userDB.UserInfo, err
 	return usersInfo, err
 }
 
-func FavoriteVideosID(userID int64) ([]int64, error) {
-	var videoIds []int64
+func FavoriteVideosID(userID int64) ([]string, error) {
+	var videoIds []string
 	err := gormDB.Model(&Favorite{}).Distinct().
 		Select("video_id").Where("user_id = ?", userID).
 		Order("updated_at desc").Scan(&videoIds).Error

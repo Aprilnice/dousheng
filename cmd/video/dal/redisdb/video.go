@@ -3,13 +3,14 @@ package redisdb
 import (
 	userInfo "dousheng/cmd/user/dal/mysqldb"
 	"dousheng/cmd/video/dal/mysqldb"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 	"strconv"
 )
 
 // AddVideoInfo redis中使用Hash存储视频信息
 func AddVideoInfo(video *mysqldb.VideoInfo) error {
-	return 	rdb.HSet(
+	return rdb.HSet(
 		ctx,
 		// key值为视频id
 		strconv.FormatInt(video.Id, 10),
@@ -58,12 +59,15 @@ func GetFeed(latestTime int64) (videos []mysqldb.VideoInfo, err error) {
 		ctx,
 		"VideoFeed",
 		&redis.ZRangeBy{
-			Min: "-inf",
-			Max: strconv.FormatInt(latestTime, 10),
+			Min:    "-inf",
+			Max:    strconv.FormatInt(latestTime, 10),
 			Offset: 0,
-			Count: 30,
+			Count:  30,
 		},
 	).Result()
+
+	fmt.Println("videoList: ", videoList)
+	//fmt.Println("latestTime: ", latestTime)
 
 	// 一次最多返回30个视频
 	num := 30
@@ -77,7 +81,7 @@ func GetFeed(latestTime int64) (videos []mysqldb.VideoInfo, err error) {
 		// 获取视频信息
 		videosInfo, err := rdb.HGetAll(ctx, videoList[i]).Result()
 		if err != nil {
-			return videos,err
+			return videos, err
 		}
 
 		// 提取信息
