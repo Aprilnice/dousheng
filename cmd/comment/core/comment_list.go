@@ -2,41 +2,81 @@ package core
 
 import (
 	"context"
-	"dousheng/cmd/comment/dal/mysqldb"
+	commentDB "dousheng/cmd/comment/dal/mysqldb"
 	"dousheng/cmd/comment/service"
+	user "dousheng/cmd/user/dal/mysqldb"
+	"dousheng/pkg/format"
+	"fmt"
+	"sync"
 )
 
 // CommentList 获取评论列表
 func (*CommentService) CommentList(ctx context.Context, req *comment.CommentListRequest, resp *comment.CommentListResponse) (err error) {
-	lists, err := mysqldb.CommentListByVideoID(req.VideoId)
-	if err != nil {
-		ResponseError(err).CommentListResponse(resp)
-		return err
+
+	var wg = sync.WaitGroup{}
+	wg.Add(2)
+	var err1, err2 error
+	var preComments []*commentDB.Comment // 存评论额的
+	var usersInfo []*user.UserInfo       // 用户信息
+	fmt.Println("videoID: ", req.VideoId)
+	// 开狗肉听
+	// 查评论列表
+	go func() {
+		defer wg.Done()
+		preComments, err1 = commentDB.VideoCommentList(req.VideoId)
+	}()
+	// 查评论用户信息
+	go func() {
+		defer wg.Done()
+		usersInfo, err2 = commentDB.CommentUserInfoByVideoID(req.VideoId)
+	}()
+
+	wg.Wait()
+	if err1 != nil {
+		ResponseError(err1).CommentListResponse(resp)
+		return err1
 	}
-	ids, err := mysqldb.CommentUserIDByVideoID(req.VideoId)
-	if err != nil {
-		ResponseError(err).CommentListResponse(resp)
-		return err
+	if err2 != nil {
+		ResponseError(err1).CommentListResponse(resp)
+		return err1
 	}
-	var users = make(map[int64]*comment.User, len(ids))
-	for _, id := range ids {
-		u := comment.User{
-			Id:   id,
-			Name: "Test",
+
+	fmt.Printf("comments: %#v", preComments)
+
+	if len(preComments) == 0 {
+		ResponseSuccess().CommentListResponse(resp)
+		return nil
+	}
+
+	// id -> userInfo
+	var commentUsers = make(map[int64]*comment.User, len(usersInfo))
+	for _, info := range usersInfo {
+		cu := comment.User{
+			Id:            info.UserId,
+			Name:          info.Name,
+			FollowCount:   info.FollowCount,
+			FollowerCount: info.FollowerCount,
+			IsFollow:      info.IsFollow,
 		}
-		users[id] = &u
+		commentUsers[info.UserId] = &cu
 	}
-	var commentLists = make([]*comment.Comment, len(lists))
-	for i, list := range lists {
+	// 打包评论信息
+	var commentsList = make([]*comment.Comment, len(preComments))
+	for i, comm := range preComments {
+		if _, ok := commentUsers[comm.UserID]; !ok { // 查不到这条用户信息
+			continue
+		}
 		c := comment.Comment{
-			User:       users[list.UserID],
-			Content:    list.CommentText,
-			CreateDate: list.CreatedAt.String(),
+			Id:         comm.CommentID,
+			User:       commentUsers[comm.UserID],
+			Content:    comm.CommentText,
+			CreateDate: format.GormDateFormat(comm.CreatedAt),
 		}
-		commentLists[i] = &c
+		commentsList[i] = &c
 	}
 
 	ResponseSuccess().CommentListResponse(resp)
-	resp.CommentList = commentLists // 填充数据
+	resp.CommentList = commentsList // 填充数据
+	fmt.Println(resp.CommentList)
 	return nil
 }

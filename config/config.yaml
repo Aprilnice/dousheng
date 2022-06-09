@@ -25,14 +25,14 @@ mysql:
   max_idle_connecrtion: 50
 
 redis:
-  host: 127.0.0.1
+  host: 192.168.141.101
   port: 6379
   db: 1
   password:
   pool_size: 100
 
 etcd:
-  address: 127.0.0.1:2379
+  address: 192.168.141.101:2379
 
 duration:
   token: 90
@@ -50,3 +50,7 @@ server:
     machine_id: 3
     name: srv.user
     address: 127.0.0.1:8970
+  favorite:
+    machine_id: 4
+    name: srv.favorite
+    address: 127.0.0.1:8950

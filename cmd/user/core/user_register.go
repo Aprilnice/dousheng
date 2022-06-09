@@ -41,7 +41,7 @@ func (*UserService) Register(ctx context.Context, req *service.DouyinUserRegiste
 		return err
 	}
 	// 成功
-	tmp := errdeal.NewResponse(errdeal.CodeSuccess).WithData("nil")
+	tmp := errdeal.NewResponse(errdeal.CodeSuccess)
 	res.StatusCode = tmp.StatusCode
 	res.StatusMsg = tmp.StatusMessage
 	return nil

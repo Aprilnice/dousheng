@@ -19,15 +19,16 @@ func main() {
 	config.Instance().WithServerConfig(constant.ServerComment)
 	config.Instance().WithServerConfig(constant.ServerVideo)
 	config.Instance().WithServerConfig(constant.ServerUser)
+	config.Instance().WithServerConfig(constant.ServerFavorite)
 
 	rpc.Init()
 
 	etcdReg := etcd.NewRegistry(
-		registry.Addrs("127.0.0.1:2379"),
+		registry.Addrs(config.Instance().EtcdConfig.Address),
 	)
 
-	//addr := fmt.Sprintf("%s:%s", config.Instance().BaseConfig.Host, config.Instance().BaseConfig.Port)
-	addr := fmt.Sprintf(":%s",config.Instance().BaseConfig.Port)
+	addr := fmt.Sprintf("%s:%s", config.Instance().BaseConfig.Host, config.Instance().BaseConfig.Port)
+	//addr := fmt.Sprintf(":%s",config.Instance().BaseConfig.Port)
 
 	//创建微服务实例，使用gin暴露http接口并注册到etcd
 	server := web.NewService(

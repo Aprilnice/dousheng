@@ -28,11 +28,13 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 	}
 
 	// 拼接播放地址
-	playURL := fmt.Sprintf("%s:%s/play/?video_id=%s",
+	playURL := fmt.Sprintf("http://%s:%s/play?video_id=%s",
 		config.Instance().BaseConfig.Host, // "192.168.43.241"
 		config.Instance().BaseConfig.Port,
 		strconv.FormatInt(videoId, 10),
 	)
+
+	fmt.Println(playURL)
 
 	// 获取视频信息
 	videoModule := &mysqldb.VideoInfo{

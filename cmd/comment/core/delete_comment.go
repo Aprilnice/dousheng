@@ -11,7 +11,7 @@ import (
 func (*CommentService) DeleteComment(ctx context.Context, req *comment.CommentActionRequest, resp *comment.CommentActionResponse) (err error) {
 	fmt.Println("delete", req)
 
-	if err = mysqldb.DeleteComment(req.GetCommentId()); err != nil {
+	if err = mysqldb.DeleteComment(req.GetCommentId(), req.GetVideoId()); err != nil {
 		ResponseError(err).CommentActionResponse(resp)
 		return err
 	}

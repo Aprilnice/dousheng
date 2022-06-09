@@ -44,7 +44,7 @@ func RegisterHandler(c *gin.Context) {
 	res, err := userRPC.Register(context.Background(), &req)
 	if err != nil {
 		fmt.Println(err)
-		response := errdeal.NewResponse(errdeal.CodeParamErr).WithData("用户名已重复，请重新输入")
+		response := errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("用户名已重复，请重新输入")
 		HttpResponse(c, response)
 		return
 	}

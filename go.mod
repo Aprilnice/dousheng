@@ -10,7 +10,6 @@ require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang/protobuf v1.5.2
 	github.com/micro/go-micro/v2 v2.9.1
-	github.com/rabbitmq/amqp091-go v1.3.4
 	github.com/spf13/viper v1.11.0
 	github.com/stretchr/testify v1.7.1
 	go.uber.org/zap v1.21.0
