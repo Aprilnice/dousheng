@@ -37,7 +37,6 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 			like = true
 			follow = true
 		}
-		tmp.IsFavorite = like
 
 		// 获取视频作者信息
 		author,err := mysqldb.GetUserInfo(videos[i].AuthorId)
@@ -46,13 +45,6 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 			resp.NextTime = req.LatestTime
 			return err
 		}
-		tmp.Author = &video.User{
-			Id: author.UserId,
-			Name: author.Name,
-			FollowCount: author.FollowCount,
-			FollowerCount: author.FollowerCount,
-			IsFollow: follow,
-		}
 
 		tmp = &video.Video{
 			Id:            videos[i].Id,
@@ -60,6 +52,15 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 			CoverUrl:      "",
 			FavoriteCount: videos[i].FavoriteCount,
 			CommentCount:  videos[i].CommentCount,
+			IsFavorite:    like,
+		}
+
+		tmp.Author = &video.User{
+			Id: author.UserId,
+			Name: author.Name,
+			FollowCount: author.FollowCount,
+			FollowerCount: author.FollowerCount,
+			IsFollow: follow,
 		}
 
 		// 添加至返回的视频列表中
