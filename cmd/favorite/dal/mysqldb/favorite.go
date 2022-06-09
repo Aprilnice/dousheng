@@ -85,14 +85,13 @@ func CancelFavorite(favorite *Favorite) error {
 
 func IsFavorite(userID, videoID int64) bool {
 	var dest Favorite
-	if err := gormDB.Unscoped().Where("user_id = ? and video_id = ?", userID, videoID).
+	// 查不到会返回 record not found 错误
+	if err := gormDB.Model(&Favorite{}).Unscoped().Where("user_id = ? and video_id = ?", userID, videoID).
 		First(&dest).Error; err != nil {
 		fmt.Println(err)
 		return false
 	}
-	if dest.UserID == 0 || dest.VideoID == 0 {
-		return false
-	}
+	fmt.Println("dest: ", dest)
 	return true
 }
 

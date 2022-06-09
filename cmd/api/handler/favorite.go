@@ -40,8 +40,8 @@ func FavoriteActionHandler(c *gin.Context) {
 	//ctx := cancelFunc
 	resp, err := serviceRPC.FavoriteAction(context.Background(), &favoriteReq)
 	if err != nil {
-		//resp.StatusCode = errdeal.CodeServiceErr
-		HttpResponse(c, resp)
+		fmt.Println(err)
+		HttpResponse(c, errdeal.NewResponse(errdeal.CodeServiceErr))
 		return
 	}
 
@@ -76,7 +76,7 @@ func FavoriteListHandler(c *gin.Context) {
 	serviceRPC := c.Keys[constant.ClientFavorite].(favorite.FavoriteService)
 	resp, err := serviceRPC.FavoriteList(context.Background(), &favoriteReq)
 	if err != nil {
-		HttpResponse(c, resp)
+		HttpResponse(c, errdeal.NewResponse(errdeal.CodeServiceErr))
 		return
 	}
 

@@ -41,8 +41,8 @@ func (c CodeErr) Error() string {
 // StatusCode:    自定义的响应码
 // StatusMessage: 响应码绑定的错误消息
 type Response struct {
-	StatusCode    int32  `json:"code"`
-	StatusMessage string `json:"message"`
+	StatusCode    int32  `json:"status_code"`
+	StatusMessage string `json:"status_message"`
 }
 
 type UserInfo struct {
