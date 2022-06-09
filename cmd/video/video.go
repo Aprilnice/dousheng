@@ -3,6 +3,7 @@ package main
 import (
 	"dousheng/cmd/video/core"
 	"dousheng/cmd/video/dal/mysqldb"
+	"dousheng/cmd/video/dal/redisdb"
 	"dousheng/cmd/video/service"
 	"dousheng/config"
 	"dousheng/pkg/constant"
@@ -36,6 +37,8 @@ func Init() {
 		log.Fatal(err)
 	}
 
+	// 初始化redis
+	redisdb.InitRedisClient(config.Instance().RedisConfig)
 }
 
 func main() {

@@ -3,6 +3,7 @@ package core
 import (
 	"context"
 	"dousheng/cmd/video/dal/mysqldb"
+	"dousheng/cmd/video/dal/redisdb"
 	video "dousheng/cmd/video/service"
 	"dousheng/pkg/errdeal"
 )
@@ -13,12 +14,17 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 	like := false
 	follow := false
 
-	// 获取视频信息
-	videos, err := mysqldb.GetVideoFeed(req.LatestTime)
+	// 从redis获取视频信息
+	videos, err := redisdb.GetFeed(req.LatestTime)
 	if err != nil {
-		ResponseFeedErr(err, resp)
-		resp.NextTime = req.LatestTime
-		return err
+
+		// 从MySQL获取视频信息
+		videos, err = mysqldb.GetVideoFeed(req.LatestTime)
+		if err != nil {
+			ResponseFeedErr(err, resp)
+			resp.NextTime = req.LatestTime
+			return err
+		}
 	}
 
 	//格式化
@@ -62,7 +68,13 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 
 	resp.StatusCode = 0
 	resp.StatusMsg = "Success"
-	resp.NextTime = videos[len(videos)-1].PublishTime
+
+	if len(videos) == 0 {
+		resp.NextTime = req.LatestTime
+	}else {
+		resp.NextTime = videos[len(videos)-1].PublishTime
+	}
+
 	return nil
 }
 

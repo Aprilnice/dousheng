@@ -7,6 +7,7 @@ import (
 	"dousheng/pkg/doushengjwt"
 	"dousheng/pkg/errdeal"
 	middlewares "dousheng/pkg/middleware"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
@@ -40,6 +41,10 @@ func VideoPublishHandler(c *gin.Context) {
 
 	// 关闭文件
 	fh.Close()
+
+	if len(bFile) == 0 {
+		fmt.Println("文件不存在")
+	}
 
 	// 绑定参数
 	req := video.DouyinPublishActionRequest{

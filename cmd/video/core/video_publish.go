@@ -3,6 +3,7 @@ package core
 import (
 	"context"
 	"dousheng/cmd/video/dal/mysqldb"
+	"dousheng/cmd/video/dal/redisdb"
 	video "dousheng/cmd/video/service"
 	"dousheng/pkg/errdeal"
 	"dousheng/pkg/snowflaker"
@@ -40,6 +41,18 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 	// 视频信息存入数据库
 	if err = mysqldb.PublishVideo(videoModule); err != nil {
 		// 出现错误  这里一般都是数据库错误
+		ResponsePublishErr(err, resp)
+		return err
+	}
+
+	// 视频信息存入redis的Hash表中
+	if err = redisdb.AddVideoInfo(videoModule); err != nil {
+		ResponsePublishErr(err, resp)
+		return err
+	}
+
+	// 视频id存入有序集合feed,用于返回视频列表
+	if err = redisdb.AddVideoId(videoModule.Id, videoModule.PublishTime); err != nil {
 		ResponsePublishErr(err, resp)
 		return err
 	}
