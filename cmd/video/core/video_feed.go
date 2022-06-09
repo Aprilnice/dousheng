@@ -17,7 +17,6 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 	// 从redis获取视频信息
 	videos, err := redisdb.GetFeed(req.LatestTime)
 	if err != nil || len(videos) == 0 {
-
 		// 从MySQL获取视频信息
 		videos, err = mysqldb.GetVideoFeed(req.LatestTime)
 		if err != nil {
@@ -33,17 +32,20 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 		// 登录状态
 		if req.UserId != 0 {
 			// 获取like和follow
-
-			like = true
-			follow = true
+			like = redisdb.GetLike(req.UserId, videos[i].Id)
+			//follow = redisdb.GetFollow(req.UserId, videos[i].AuthorId)
 		}
 
-		// 获取视频作者信息
-		author,err := mysqldb.GetUserInfo(videos[i].AuthorId)
-		if err != nil {
-			ResponseFeedErr(err, resp)
-			resp.NextTime = req.LatestTime
-			return err
+		// 从redis获取作者信息
+		author, err := redisdb.GetAuthorInfo(videos[i].AuthorId)
+		if err != nil || len(videos) == 0 {
+			// 从MySQL获取视频作者信息
+			author,err = mysqldb.GetUserInfo(videos[i].AuthorId)
+			if err != nil {
+				ResponseFeedErr(err, resp)
+				resp.NextTime = req.LatestTime
+				return err
+			}
 		}
 
 		tmp = &video.Video{

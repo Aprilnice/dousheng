@@ -3,6 +3,7 @@ package redisdb
 import (
 	userInfo "dousheng/cmd/user/dal/mysqldb"
 	"dousheng/cmd/video/dal/mysqldb"
+	"dousheng/pkg/rediskey"
 	"github.com/go-redis/redis/v8"
 	"strconv"
 )
@@ -12,7 +13,7 @@ func AddVideoInfo(video *mysqldb.VideoInfo) error {
 	return 	rdb.HSet(
 		ctx,
 		// key值为视频id
-		strconv.FormatInt(video.Id, 10),
+		rediskey.NewRedisKey(rediskey.KeyVideoHash, strconv.FormatInt(video.Id, 10)),
 		// field 为 Title
 		"Title",
 		video.Title,
@@ -41,7 +42,7 @@ func AddVideoInfo(video *mysqldb.VideoInfo) error {
 func AddVideoId(videoId int64, publishTime int64) error {
 	return rdb.ZAdd(ctx,
 		// 集合为VideoFeed
-		"VideoFeed",
+		rediskey.NewRedisKey(rediskey.KeyFeedZSet),
 		&redis.Z{
 			// 分数为发布时间,用来排序
 			Score: float64(publishTime),
@@ -56,7 +57,7 @@ func GetFeed(latestTime int64) (videos []mysqldb.VideoInfo, err error) {
 	// 获取视频列表中视频的id
 	videoList, err := rdb.ZRevRangeByScore(
 		ctx,
-		"VideoFeed",
+		rediskey.NewRedisKey(rediskey.KeyFeedZSet),
 		&redis.ZRangeBy{
 			Min: "-inf",
 			Max: strconv.FormatInt(latestTime, 10),
@@ -75,7 +76,10 @@ func GetFeed(latestTime int64) (videos []mysqldb.VideoInfo, err error) {
 	var tmp mysqldb.VideoInfo
 	for i := 0; i < num; i++ {
 		// 获取视频信息
-		videosInfo, err := rdb.HGetAll(ctx, videoList[i]).Result()
+		videosInfo, err := rdb.HGetAll(
+			ctx,
+			rediskey.NewRedisKey(rediskey.KeyVideoHash, videoList[i]),
+		).Result()
 		if err != nil {
 			return videos,err
 		}
@@ -94,7 +98,54 @@ func GetFeed(latestTime int64) (videos []mysqldb.VideoInfo, err error) {
 	return videos, nil
 }
 
+// AddUserInfo 向redis中添加用户信息
+func AddUserInfo(user userInfo.UserInfo) error {
+	return 	rdb.HSet(
+		ctx,
+		// key值为用户id
+		rediskey.NewRedisKey(rediskey.KeyUserHash, strconv.FormatInt(user.UserId, 10)),
+		// field 为 Name
+		"Name",
+		user.Name,
+		// field 为 FollowCount
+		"FollowCount",
+		user.FollowCount,
+		// field 为 FollowerCount
+		"FollowerCount",
+		user.FollowerCount,
+		// field 为 PublishTime
+	).Err()
+}
+
 // GetAuthorInfo redis获取作者信息
 func GetAuthorInfo(authorId int64) (user userInfo.UserInfo, err error) {
+	info, err := rdb.HGetAll(
+		ctx,
+		rediskey.NewRedisKey(rediskey.KeyUserHash,strconv.FormatInt(authorId, 10)),
+	).Result()
+	user.UserId = authorId
+	user.Name = info["Name"]
+	user.FollowCount, _ = strconv.ParseInt(info["FollowCount"], 10, 64)
+	user.FollowerCount, _ = strconv.ParseInt(info["FollowerCount"], 10, 64)
 	return user, nil
+}
+
+// GetLike 获取是否点赞
+func GetLike(userId int64, videoId int64) bool {
+	_, err := rdb.ZRank(
+		ctx,
+		rediskey.NewRedisKey(rediskey.KeyFavoriteZSet, strconv.FormatInt(userId, 10)),
+		strconv.FormatInt(videoId, 10),
+	).Result()
+	// key不存在err = redis: nil
+	if err != nil {
+		return false
+	}else {
+		return true
+	}
+}
+
+// GetFollow 获取是否关注
+func GetFollow(userId int64, authorId int64) {
+
 }

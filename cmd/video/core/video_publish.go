@@ -62,6 +62,19 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 		return err
 	}
 
+
+	// 视频作者信息存入redis
+	// mysql查找用户信息
+	authorInfo, err := mysqldb.GetUserInfo(req.UserId)
+	if err != nil {
+		ResponsePublishErr(err, resp)
+		return err
+	}
+	// redis存入用户信息便于读取
+	if err = redisdb.AddUserInfo(authorInfo); err != nil {
+		return err
+	}
+
 	// 视频id存入有序集合feed,用于返回视频列表
 	if err = redisdb.AddVideoId(videoModule.Id, videoModule.PublishTime); err != nil {
 		ResponsePublishErr(err, resp)

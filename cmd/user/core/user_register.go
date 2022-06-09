@@ -3,7 +3,6 @@ package core
 import (
 	"context"
 	"dousheng/cmd/user/dal/mysqldb"
-	"dousheng/cmd/user/dal/redisdb"
 	"dousheng/cmd/user/service"
 	"dousheng/pkg/doushengjwt"
 	"dousheng/pkg/errdeal"
@@ -42,10 +41,7 @@ func (*UserService) Register(ctx context.Context, req *service.DouyinUserRegiste
 		// 出现错误  这里一般都是数据库错误
 		return err
 	}
-	// redis存入用户信息
-	if err = redisdb.AddUserInfo(userInfoModel); err != nil {
-		return err
-	}
+
 	// 成功
 	tmp := errdeal.NewResponse(errdeal.CodeSuccess)
 	res.StatusCode = tmp.StatusCode

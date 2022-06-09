@@ -6,6 +6,9 @@ const (
 	KeySep          = ":" // 分隔符
 	KeyPrefix       = "dousheng"
 	KeyFavoriteZSet = "favorite:user"
+	KeyFeedZSet     = "video:feed"
+	KeyVideoHash    = "video"
+	KeyUserHash     = "user"
 )
 
 func NewRedisKey(keys ...string) (redisKey string) {

@@ -3,7 +3,6 @@ package main
 import (
 	"dousheng/cmd/user/core"
 	"dousheng/cmd/user/dal/mysqldb"
-	"dousheng/cmd/user/dal/redisdb"
 	"dousheng/cmd/user/service"
 	"dousheng/config"
 	"dousheng/pkg/constant"
@@ -36,10 +35,6 @@ func Init() {
 		log.Println("mysql数据库初始化失败")
 		log.Fatal(err)
 	}
-
-	// 初始化redis
-	redisdb.InitRedisClient(config.Instance().RedisConfig)
-
 }
 
 func main() {

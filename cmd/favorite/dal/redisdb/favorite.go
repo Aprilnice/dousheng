@@ -8,17 +8,13 @@ import (
 	"time"
 )
 
-const (
-	FavoriteValue = 432 // 指定一个赞成票是432分  432*200 = 86400秒 = 一天 也就是说获得200张票可以将视频续一天
-)
-
 // CreateFavorite 在redis中新增一条点赞记录
 func CreateFavorite(favorite *favorite.FavoriteActionRequest) error {
 	pipeline := rdb.TxPipeline()
 	uid := favorite.UserId
 	vid := favorite.VideoId
 	uidStr := strconv.FormatInt(uid, 10)
-	vidStr := strconv.FormatInt(vid, 10)
+
 	// 增加用户点赞记录
 	userFavoriteKey := rediskey.NewRedisKey(rediskey.KeyFavoriteZSet, uidStr)
 
@@ -26,9 +22,7 @@ func CreateFavorite(favorite *favorite.FavoriteActionRequest) error {
 		Score:  float64(time.Now().Unix()),
 		Member: vid,
 	})
-	videoFavoriteKey := "VideoFeed"
-	// 为该视频的发布时间毫秒数增加 423
-	pipeline.ZIncrBy(ctx, videoFavoriteKey, FavoriteValue, vidStr)
+
 	_, err := pipeline.Exec(ctx)
 	return err
 }
@@ -44,10 +38,9 @@ func CancelFavorite(favorite *favorite.FavoriteActionRequest) error {
 	userFavoriteKey := rediskey.NewRedisKey(rediskey.KeyFavoriteZSet, uidStr)
 	pipeline.ZRem(ctx, userFavoriteKey, vid)
 
-	videoFavoriteKey := rediskey.NewRedisKey(rediskey.KeyFavoriteZSet, vidStr)
 	// 为该视频记录点赞用户
-	// 为该视频的发布时间毫秒数减少 423
-	pipeline.ZIncrBy(ctx, videoFavoriteKey, -1*FavoriteValue, vidStr)
+	videoFavoriteKey := rediskey.NewRedisKey(rediskey.KeyFavoriteZSet, vidStr)
+	pipeline.ZIncrBy(ctx, videoFavoriteKey, -1, vidStr)
 
 	_, err := pipeline.Exec(ctx)
 	return err
