@@ -14,7 +14,7 @@ func (*UserService) UserInfo(ctx context.Context, req *service.DouyinUserRequest
 		// 出现错误  这里一般都是数据库错误
 		return err
 	}
-	tmp := errdeal.NewResponse(errdeal.CodeSuccess).WithData("nil")
+	tmp := errdeal.NewResponse(errdeal.CodeSuccess)
 	res.StatusCode = tmp.StatusCode
 	res.StatusMsg = tmp.StatusMessage
 	res.User = &service.User{

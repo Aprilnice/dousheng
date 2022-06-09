@@ -36,3 +36,6 @@ type FavoriteActionParam struct {
 	VideoId    int64  `form:"video_id" json:"video_id,omitempty,string" binding:"required"`          // 视频id
 	ActionType int32  `form:"action_type" json:"action_type,omitempty" binding:"required,oneof=1 2"` // 1 发布评论 2删除评论
 }
+type FavoriteListParam struct {
+	Token string `form:"token" json:"token,omitempty" binding:"required"` // 用户鉴权
+}

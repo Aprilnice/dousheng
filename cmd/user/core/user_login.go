@@ -24,7 +24,7 @@ func (*UserService) Login(ctx context.Context, req *user.DouyinUserLoginRequest,
 		return err
 	}
 	// 成功
-	tmp := errdeal.NewResponse(errdeal.CodeSuccess).WithData("nil")
+	tmp := errdeal.NewResponse(errdeal.CodeSuccess)
 	res.StatusCode = tmp.StatusCode
 	res.StatusMsg = tmp.StatusMessage
 	res.UserId = mysqldb.GetUserId(req.GetUsername())

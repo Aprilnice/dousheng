@@ -69,9 +69,9 @@ func Init(cfg *config.MySQLConfig) error {
 // Migrate 迁移评论表
 func Migrate() error {
 	migrator := gormDB.Migrator()
-	if migrator.HasTable(&Comment{}) {
+	if migrator.HasTable(&Favorite{}) {
 		return nil
 	}
-	return migrator.CreateTable(&Comment{})
+	return migrator.CreateTable(&Favorite{})
 
 }

@@ -16,6 +16,7 @@ message CommentActionRequest{
 message CommentActionResponse{
   int32 status_code = 1; // 状态码0成功
   string status_msg = 2;  // 状态描述
+  Comment comment = 3; // 评论内容
 }
 
 message CommentListRequest {

@@ -13,7 +13,7 @@ func SetupServiceMiddleware() gin.HandlerFunc {
 		c.Keys[constant.ClientUser] = rpc.UserRPC
 		c.Keys[constant.ClientVideo] = rpc.VideoRPC
 		c.Keys[constant.ClientComment] = rpc.CommentRPC
-		//c.Keys[constant.ClientFavorite] = rpc.FavoriteRPC
+		c.Keys[constant.ClientFavorite] = rpc.FavoriteRPC
 		c.Next()
 	}
 }
