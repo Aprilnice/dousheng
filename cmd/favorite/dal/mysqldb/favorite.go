@@ -43,11 +43,11 @@ func CreateFavorite(favorite *Favorite) error {
 			tx.Rollback()
 			return err
 		}
-	}
-
-	if err := tx.Create(favorite).Error; err != nil {
-		tx.Rollback()
-		return err
+	} else {
+		if err := tx.Create(favorite).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
 	}
 
 	// 更新视频表
@@ -96,7 +96,7 @@ func IsFavorite(userID, videoID int64) bool {
 }
 
 // QueryVideosInfo 查询视频信息
-func QueryVideosInfo(videoIds []string, ch chan<- int) ([]*videoDB.VideoInfo, error) {
+func QueryVideosInfo(videoIds []string) ([]*videoDB.VideoInfo, error) {
 	var videosInfo []*videoDB.VideoInfo
 	//err := gormDB.Table("t_video_infos").Where("id in ?", videoIds).Find(&videosInfo).Clauses().Error
 	err := gormDB.Debug().Where("id in ?", videoIds).Clauses(clause.OrderBy{
@@ -106,32 +106,18 @@ func QueryVideosInfo(videoIds []string, ch chan<- int) ([]*videoDB.VideoInfo, er
 			WithoutParentheses: true},
 	}).Find(&videosInfo).Error
 
-	defer func() {
-		ch <- 1
-		if err != nil {
-			ch <- -1
-		}
-	}()
-
 	return videosInfo, err
 }
 
-func QueryAuthorsInfo(videoIds []string, ch chan<- int) ([]*userDB.UserInfo, error) {
+func QueryAuthorsInfo(videoIds []string) ([]*userDB.UserInfo, error) {
 	var userIds []int64
+	var usersInfo []*userDB.UserInfo
 	err := gormDB.Table("t_video_infos").Select([]string{"author_id"}).
 		Where("id in ?", videoIds).Scan(&userIds).Error
-	if err != nil || userIds == nil {
-		ch <- -1
-		return nil, err
+	if err != nil || len(userIds) == 0 {
+		return usersInfo, err
 	}
-	var usersInfo []*userDB.UserInfo
 	err = gormDB.Table("t_user_infos").Where("user_id in ?", userIds).Find(&usersInfo).Error
-	defer func() {
-		ch <- 1
-		if err != nil || usersInfo == nil {
-			ch <- -1
-		}
-	}()
 
 	return usersInfo, err
 }

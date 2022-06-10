@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option go_package = "../service;relation";
+
+package relation;
+
+message RelationActionRequest{
+  string token = 1;   // 用户鉴权
+  int64 user_id = 2;
+  int64 to_user_id = 3;  // 视频id
+  int32 action_type = 4;  // 1 关注 2 取消
+}
+
+message RelationActionResponse{
+  int32 status_code = 1; // 状态码0成功
+  string status_msg = 2;  // 状态描述
+}
+
+// 粉丝
+message FollowerListRequest{
+  string token = 1;   // 用户鉴权
+  int64 user_id = 2;
+}
+
+message FollowerListResponse{
+  int32 status_code = 1; // 状态码0成功
+  string status_msg = 2;  // 状态描述
+  repeated User user_list = 3; //粉丝列表
+}
+
+// 关注
+message FollowListRequest{
+  string token = 1;   // 用户鉴权
+  int64 user_id = 2;
+}
+
+message FollowListResponse{
+  int32 status_code = 1; // 状态码0成功
+  string status_msg = 2;  // 状态描述
+  repeated User user_list = 3; // 关注列表
+}
+
+message User {
+  int64 id = 1;  //用户id
+  string name = 2; //用户名称
+  int64 follow_count = 3; //关注总数
+  int64 follower_count = 4;//粉丝总数
+  bool is_follow = 5;  // true-已关注，false-未关注
+}
+
+
+service Relation {
+  rpc RelationAction(RelationActionRequest) returns (RelationActionResponse);
+  rpc FollowList(FollowListRequest) returns (FollowerListResponse);
+  rpc FollowerList(FollowerListRequest) returns (FollowerListResponse);
+}

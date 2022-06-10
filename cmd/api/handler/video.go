@@ -60,7 +60,7 @@ func VideoPublishHandler(c *gin.Context) {
 	// 处理错误
 	var response *errdeal.Response
 	if err != nil {
-		response = errdeal.NewResponse(errdeal.CodeErr(resp.StatusCode)).WithErr(err)
+		response = errdeal.NewResponse(errdeal.CodeServiceErr).WithErr(err)
 		HttpResponse(c, response)
 		return
 	}

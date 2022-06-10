@@ -9,6 +9,8 @@ const (
 	KeyFeedZSet     = "video:feed"
 	KeyVideoHash    = "video"
 	KeyUserHash     = "user"
+	KeyUserFollow   = "follow:user"
+	KeyUserFollower = "follower:user"
 )
 
 func NewRedisKey(keys ...string) (redisKey string) {

@@ -3,6 +3,7 @@ package core
 import (
 	"context"
 	"dousheng/cmd/comment/dal/mysqldb"
+	"dousheng/cmd/comment/dal/redisdb"
 	"dousheng/cmd/comment/service"
 	userDB "dousheng/cmd/user/dal/mysqldb"
 	"dousheng/pkg/format"
@@ -27,25 +28,26 @@ func (*CommentService) CreateComment(ctx context.Context, req *comment.CommentAc
 	}
 	var user *userDB.UserInfo
 	var wg sync.WaitGroup
-	wg.Add(2)
+	wg.Add(1)
 	// 查询用户信息
 	go func() {
 		defer wg.Done()
 		user, err = mysqldb.CommentUserInfo(req.UserId)
 	}()
 
-	// 存储
-	go func() {
-		defer wg.Done()
-		err = mysqldb.CreateComment(commentModel)
-	}()
 	wg.Wait()
 
-	if err != nil {
+	// 修改redis
+	if err = redisdb.CreateComment(req.VideoId); err != nil {
 		ResponseError(err).CommentActionResponse(resp)
-		fmt.Println("err: ", err)
 		return err
 	}
+
+	if err = mysqldb.CreateComment(commentModel); err != nil {
+		ResponseError(err).CommentActionResponse(resp)
+		return err
+	}
+
 	fmt.Println("user: ", user, req.UserId)
 
 	commUser := comment.User{

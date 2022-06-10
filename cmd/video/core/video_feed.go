@@ -40,7 +40,7 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 		author, err := redisdb.GetAuthorInfo(videos[i].AuthorId)
 		if err != nil || len(videos) == 0 {
 			// 从MySQL获取视频作者信息
-			author,err = mysqldb.GetUserInfo(videos[i].AuthorId)
+			author, err = mysqldb.GetUserInfo(videos[i].AuthorId)
 			if err != nil {
 				ResponseFeedErr(err, resp)
 				resp.NextTime = req.LatestTime
@@ -51,18 +51,18 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 		tmp = &video.Video{
 			Id:            videos[i].Id,
 			PlayUrl:       videos[i].PlayUrl,
-			CoverUrl:      "",
+			CoverUrl:      videos[i].CoverUrl,
 			FavoriteCount: videos[i].FavoriteCount,
 			CommentCount:  videos[i].CommentCount,
 			IsFavorite:    like,
 		}
 
 		tmp.Author = &video.User{
-			Id: author.UserId,
-			Name: author.Name,
-			FollowCount: author.FollowCount,
+			Id:            author.UserId,
+			Name:          author.Name,
+			FollowCount:   author.FollowCount,
 			FollowerCount: author.FollowerCount,
-			IsFollow: follow,
+			IsFollow:      follow,
 		}
 
 		// 添加至返回的视频列表中
@@ -74,7 +74,7 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 
 	if len(videos) == 0 {
 		resp.NextTime = req.LatestTime
-	}else {
+	} else {
 		resp.NextTime = videos[len(videos)-1].PublishTime
 	}
 

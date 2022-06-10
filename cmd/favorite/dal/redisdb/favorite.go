@@ -22,9 +22,15 @@ func CreateFavorite(favorite *favorite.FavoriteActionRequest) error {
 		Score:  float64(time.Now().Unix()),
 		Member: vid,
 	})
-
+	// 点赞数加一
+	vidStr := strconv.FormatInt(vid, 10)
+	pipeline.HIncrBy(ctx,
+		rediskey.NewRedisKey(rediskey.KeyVideoHash, vidStr),
+		"FavoriteCount",
+		1)
 	_, err := pipeline.Exec(ctx)
 	return err
+
 }
 
 // CancelFavorite 取消点赞
@@ -33,16 +39,19 @@ func CancelFavorite(favorite *favorite.FavoriteActionRequest) error {
 	uid := favorite.UserId
 	vid := favorite.VideoId
 	uidStr := strconv.FormatInt(uid, 10)
-	vidStr := strconv.FormatInt(vid, 10)
 	// 取消用户点赞记录
 	userFavoriteKey := rediskey.NewRedisKey(rediskey.KeyFavoriteZSet, uidStr)
 	pipeline.ZRem(ctx, userFavoriteKey, vid)
 
-	// 为该视频记录点赞用户
-	videoFavoriteKey := rediskey.NewRedisKey(rediskey.KeyFavoriteZSet, vidStr)
-	pipeline.ZIncrBy(ctx, videoFavoriteKey, -1, vidStr)
+	// 点赞数减一
+	vidStr := strconv.FormatInt(vid, 10)
+	pipeline.HIncrBy(ctx,
+		rediskey.NewRedisKey(rediskey.KeyVideoHash, vidStr),
+		"FavoriteCount",
+		-1)
 
 	_, err := pipeline.Exec(ctx)
+
 	return err
 }
 

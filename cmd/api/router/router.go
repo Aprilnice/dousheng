@@ -63,7 +63,7 @@ func Setup() *gin.Engine {
 	// 视频播放
 	r.GET("/play", handler2.VideoPlayHandler)
 	// 获取封面
-	r.POST("/cover", handler2.GetCoverHandler)
+	r.GET("/cover", handler2.GetCoverHandler)
 	// 获取视频流
 	r.GET("/douyin/feed", handler2.GetVideoFeedHandler)
 	// 获取评论列表

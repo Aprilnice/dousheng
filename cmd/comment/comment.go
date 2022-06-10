@@ -3,6 +3,7 @@ package main
 import (
 	"dousheng/cmd/comment/core"
 	"dousheng/cmd/comment/dal/mysqldb"
+	"dousheng/cmd/comment/dal/redisdb"
 	comment "dousheng/cmd/comment/service"
 	"dousheng/config"
 	"dousheng/pkg/constant"
@@ -22,7 +23,7 @@ func Init() {
 
 	// 初始化ID生成器
 	if err := snowflaker.Init(
-		config.Instance().StartTime,                                             // 起始时间
+		config.Instance().StartTime, // 起始时间
 		config.Instance().ServerConfig.Server(constant.ServerComment).MachineID, // 不同的服务不同的机器id
 	); err != nil {
 
@@ -33,6 +34,12 @@ func Init() {
 	// 初始化数据库
 	if err := mysqldb.Init(config.Instance().MySQLConfig); err != nil {
 		log.Println("mysql数据库初始化失败")
+		log.Fatal(err)
+	}
+
+	// 初始化redis
+	if err := redisdb.Init(config.Instance().RedisConfig); err != nil {
+		log.Println("redis数据库初始化失败")
 		log.Fatal(err)
 	}
 

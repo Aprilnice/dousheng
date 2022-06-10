@@ -7,6 +7,7 @@ import (
 	video "dousheng/cmd/video/service"
 	"dousheng/config"
 	"dousheng/pkg/errdeal"
+	"dousheng/pkg/ffmpeg"
 	"dousheng/pkg/snowflaker"
 	"fmt"
 	"io/ioutil"
@@ -27,6 +28,9 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 		return err
 	}
 
+	// 截取封面
+	ffmpeg.CaptureVideoWin(videoId)
+
 	// 拼接播放地址
 	playURL := fmt.Sprintf("http://%s:%s/play?video_id=%s",
 		config.Instance().BaseConfig.Host, // "192.168.43.241"
@@ -34,7 +38,15 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 		strconv.FormatInt(videoId, 10),
 	)
 
+	//拼接封面地址
+	coverURL := fmt.Sprintf("http://%s:%s/cover?cover_id=%s",
+		config.Instance().BaseConfig.Host, // "192.168.43.241"
+		config.Instance().BaseConfig.Port,
+		strconv.FormatInt(videoId, 10),
+	)
+
 	fmt.Println(playURL)
+	fmt.Println(coverURL)
 
 	// 获取视频信息
 	videoModule := &mysqldb.VideoInfo{
@@ -42,7 +54,7 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 		Title:         req.Title,
 		AuthorId:      req.UserId,
 		PlayUrl:       playURL, // 播放地址
-		CoverUrl:      "",
+		CoverUrl:      coverURL,
 		FavoriteCount: 0,
 		CommentCount:  0,
 		// 获得毫秒级时间戳
@@ -61,7 +73,6 @@ func (*VideoModuleService) VideoPublish(c context.Context, req *video.DouyinPubl
 		ResponsePublishErr(err, resp)
 		return err
 	}
-
 
 	// 视频作者信息存入redis
 	// 判断作者信息是否在redis中

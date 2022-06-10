@@ -13,12 +13,13 @@ import (
 // CommentList 获取评论列表
 func (*CommentService) CommentList(ctx context.Context, req *comment.CommentListRequest, resp *comment.CommentListResponse) (err error) {
 
+	fmt.Println("评论列表Service")
 	var wg = sync.WaitGroup{}
 	wg.Add(2)
 	var err1, err2 error
 	var preComments []*commentDB.Comment // 存评论额的
 	var usersInfo []*user.UserInfo       // 用户信息
-	fmt.Println("videoID: ", req.VideoId)
+	fmt.Println("videoID: ->", req.VideoId)
 	// 开狗肉听
 	// 查评论列表
 	go func() {
@@ -80,4 +81,3 @@ func (*CommentService) CommentList(ctx context.Context, req *comment.CommentList
 	fmt.Println(resp.CommentList)
 	return nil
 }
-
