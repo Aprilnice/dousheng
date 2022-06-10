@@ -6,6 +6,7 @@ import (
 	"dousheng/cmd/video/dal/redisdb"
 	video "dousheng/cmd/video/service"
 	"dousheng/pkg/errdeal"
+	"errors"
 )
 
 // VideoFeed 视频流
@@ -16,12 +17,16 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 
 	// 从redis获取视频信息
 	videos, err := redisdb.GetFeed(req.LatestTime)
-	if err != nil || len(videos) == 0 {
-		// 从MySQL获取视频信息
-		videos, err = mysqldb.GetVideoFeed(req.LatestTime)
-		if err != nil {
-			ResponseFeedErr(err, resp)
-			resp.NextTime = req.LatestTime
+	if err != nil {
+		if errors.Is(err, errors.New("redis: nil")) {
+			// 从MySQL获取视频信息
+			videos, err = mysqldb.GetVideoFeed(req.LatestTime)
+			if err != nil {
+				ResponseFeedErr(err, resp)
+				resp.NextTime = req.LatestTime
+				return err
+			}
+		}else {
 			return err
 		}
 	}

@@ -50,6 +50,8 @@ type VideoModuleService interface {
 	PlayVideo(ctx context.Context, in *PlayVideoReq, opts ...client.CallOption) (*PlayVideoResp, error)
 	// GetCover 获取封面
 	GetCover(ctx context.Context, in *GetCoverReq, opts ...client.CallOption) (*GetCoverResp, error)
+	// GetVideoList 获取用户发布列表
+	GetVideoList(ctx context.Context, in *GetVideoListReq, opts ...client.CallOption) (*GetVideoListResp, error)
 }
 
 type videoModuleService struct {
@@ -104,6 +106,16 @@ func (c *videoModuleService) GetCover(ctx context.Context, in *GetCoverReq, opts
 	return out, nil
 }
 
+func (c *videoModuleService) GetVideoList(ctx context.Context, in *GetVideoListReq, opts ...client.CallOption) (*GetVideoListResp, error) {
+	req := c.c.NewRequest(c.name, "VideoModule.GetVideoList", in)
+	out := new(GetVideoListResp)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for VideoModule service
 
 type VideoModuleHandler interface {
@@ -115,6 +127,8 @@ type VideoModuleHandler interface {
 	PlayVideo(context.Context, *PlayVideoReq, *PlayVideoResp) error
 	// GetCover 获取封面
 	GetCover(context.Context, *GetCoverReq, *GetCoverResp) error
+	// GetVideoList 获取用户发布列表
+	GetVideoList(context.Context, *GetVideoListReq, *GetVideoListResp) error
 }
 
 func RegisterVideoModuleHandler(s server.Server, hdlr VideoModuleHandler, opts ...server.HandlerOption) error {
@@ -123,6 +137,7 @@ func RegisterVideoModuleHandler(s server.Server, hdlr VideoModuleHandler, opts .
 		VideoFeed(ctx context.Context, in *DouyinFeedRequest, out *DouyinFeedResponse) error
 		PlayVideo(ctx context.Context, in *PlayVideoReq, out *PlayVideoResp) error
 		GetCover(ctx context.Context, in *GetCoverReq, out *GetCoverResp) error
+		GetVideoList(ctx context.Context, in *GetVideoListReq, out *GetVideoListResp) error
 	}
 	type VideoModule struct {
 		videoModule
@@ -149,4 +164,8 @@ func (h *videoModuleHandler) PlayVideo(ctx context.Context, in *PlayVideoReq, ou
 
 func (h *videoModuleHandler) GetCover(ctx context.Context, in *GetCoverReq, out *GetCoverResp) error {
 	return h.VideoModuleHandler.GetCover(ctx, in, out)
+}
+
+func (h *videoModuleHandler) GetVideoList(ctx context.Context, in *GetVideoListReq, out *GetVideoListResp) error {
+	return h.VideoModuleHandler.GetVideoList(ctx, in, out)
 }

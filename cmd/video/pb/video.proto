@@ -71,6 +71,18 @@ message GetCoverResp {
   bytes data = 1; // 视频封面数据
 }
 
+// GetVideoListReq 获取用户发布列表请求
+message GetVideoListReq {
+  int64 user_id = 1; // 用户id
+}
+
+// GetVideoListResp 获取用户发布列表响应
+message GetVideoListResp {
+  int32 status_code = 1; // 状态码，0-成功，其他值-失败
+  string status_msg = 2; // 返回状态描述
+  repeated Video video_list = 3; // 视频列表
+}
+
 // VideoModule 视频服务
 service VideoModule {
   // VideoPublish 视频上传
@@ -81,4 +93,6 @@ service VideoModule {
   rpc PlayVideo(PlayVideoReq) returns (PlayVideoResp);
   // GetCover 获取封面
   rpc GetCover(GetCoverReq) returns (GetCoverResp);
+  // GetVideoList 获取用户发布列表
+  rpc GetVideoList(GetVideoListReq) returns (GetVideoListResp);
 }

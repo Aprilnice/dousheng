@@ -59,6 +59,11 @@ func Setup() *gin.Engine {
 		// 视频发布 test
 		//r.POST("/douyin/publish/action/", handler2.VideoPublishHandler)
 
+		// 获取用户发布视频列表
+		r.GET("/douyin/publish/list/",
+			middlewares.JwtTokenMiddleware(middlewares.URLToken("token")),
+			handler2.GetVideoListHandler)
+
 	}
 	// 视频播放
 	r.GET("/play", handler2.VideoPlayHandler)

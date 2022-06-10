@@ -65,6 +65,9 @@ func GetFeed(latestTime int64) (videos []mysqldb.VideoInfo, err error) {
 			Count:  30,
 		},
 	).Result()
+	if err != nil {
+		return videos, nil
+	}
 
 	// 一次最多返回30个视频
 	num := 30
@@ -126,7 +129,6 @@ func AddUserInfo(user userInfo.UserInfo) error {
 		// field 为 FollowerCount
 		"FollowerCount",
 		user.FollowerCount,
-		// field 为 PublishTime
 	).Err()
 }
 
@@ -161,4 +163,51 @@ func GetLike(userId int64, videoId int64) bool {
 // GetFollow 获取是否关注
 func GetFollow(userId int64, authorId int64) {
 
+}
+
+// AddVideoToUser 视频信息存入用户信息便于获取发布列表
+func AddVideoToUser(userId int64, videoId int64) error {
+	return 	rdb.HSet(
+		ctx,
+		// key值为用户id
+		rediskey.NewRedisKey(rediskey.KeyUserHash, strconv.FormatInt(userId, 10)),
+		// field 为 video
+		"videoId",
+		// value为空
+		videoId,
+	).Err()
+}
+
+// GetVideoList 获取用户视频列表
+func GetVideoList(userId int64) (videos []mysqldb.VideoInfo, err error) {
+	// 获取所有视频id
+	videoList, err := rdb.HGetAll(
+		ctx,
+		rediskey.NewRedisKey(rediskey.KeyUserHash, strconv.FormatInt(userId, 10)),
+	).Result()
+
+	// 获取具体视频信息
+	var tmp mysqldb.VideoInfo
+	for i := 0; i < len(videoList) - 3; i++ {
+		// 获取视频信息
+		videosInfo, err := rdb.HGetAll(
+			ctx,
+			rediskey.NewRedisKey(rediskey.KeyVideoHash, videoList["videoId"]),
+		).Result()
+		if err != nil {
+			return videos, err
+		}
+
+		// 提取信息
+		tmp.Id, _ = strconv.ParseInt(videoList["videoId"], 10, 64)
+		tmp.AuthorId, _ = strconv.ParseInt(videosInfo["AuthorId"], 10, 64)
+		tmp.PlayUrl = videosInfo["PlayUrl"]
+		tmp.CoverUrl = videosInfo["CoverUrl"]
+		tmp.FavoriteCount, _ = strconv.ParseInt(videosInfo["FavoriteCount"], 10, 64)
+		tmp.CommentCount, _ = strconv.ParseInt(videosInfo["CommentCount"], 10, 64)
+		tmp.PublishTime, _ = strconv.ParseInt(videosInfo["PublishTime"], 10, 64)
+
+		videos = append(videos, tmp)
+	}
+	return videos, nil
 }

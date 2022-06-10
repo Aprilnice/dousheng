@@ -167,3 +167,36 @@ func GetVideoFeedHandler(c *gin.Context) {
 		VideoList:     resp.VideoList,
 	})
 }
+
+// GetVideoListHandler 获取用户发布视频列表
+func GetVideoListHandler(c *gin.Context) {
+	// 获取参数
+	userId := c.Query("user_id")
+	id, _ :=  strconv.ParseInt(userId, 10, 64)
+
+	// 绑定参数
+	req := video.GetVideoListReq{UserId:id}
+
+	// rpc调用
+	videoRPC := c.Keys[constant.ClientVideo].(video.VideoModuleService)
+	resp, err := videoRPC.GetVideoList(context.Background(), &req)
+
+	// 处理错误
+	var response *errdeal.Response
+	if err != nil {
+		response = errdeal.NewResponse(errdeal.CodeErr(resp.StatusCode)).WithErr(err)
+		c.JSON(http.StatusOK, errdeal.FeedResponse{
+			StatusCode:    response.StatusCode,
+			StatusMessage: response.StatusMessage,
+		})
+		return
+	}
+
+	// 成功
+	response = errdeal.NewResponse(errdeal.CodeErr(resp.StatusCode))
+	c.JSON(http.StatusOK, errdeal.FeedResponse{
+		StatusCode:    response.StatusCode,
+		StatusMessage: response.StatusMessage,
+		VideoList:     resp.VideoList,
+	})
+}

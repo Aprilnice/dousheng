@@ -40,3 +40,9 @@ func GetUserInfo(userId int64) (user userInfo.UserInfo, err error) {
 	err = gormDB.Table("t_user_infos").Where("user_id = ?", userId).Find(&user).Error
 	return user, err
 }
+
+// GetVideoList 获取用户视频列表
+func GetVideoList(userId int64) (videos []VideoInfo, err error) {
+	err = gormDB.Table("t_video_infos").Where("user_id = ?", userId).Find(&videos).Error
+	return videos, err
+}
