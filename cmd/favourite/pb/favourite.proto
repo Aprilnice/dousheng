@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "../service;favorite";
+option go_package = "../service;favourite";
 
 package favorite;
 

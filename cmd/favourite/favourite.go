@@ -1,10 +1,10 @@
 package main
 
 import (
-	"dousheng/cmd/favorite/core"
-	"dousheng/cmd/favorite/dal/mysqldb"
-	"dousheng/cmd/favorite/dal/redisdb"
-	favorite "dousheng/cmd/favorite/service"
+	"dousheng/cmd/favourite/core"
+	"dousheng/cmd/favourite/dal/mysqldb"
+	"dousheng/cmd/favourite/dal/redisdb"
+	favorite "dousheng/cmd/favourite/service"
 	"dousheng/config"
 	"dousheng/pkg/constant"
 	"github.com/micro/go-micro/v2"
