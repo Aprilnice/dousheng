@@ -120,7 +120,7 @@ func CancelFollow(userID, toUserID int64) error {
 func IsFollow(userID, toUserID int64) bool {
 	var dest Relation
 	// 查不到会返回 record not found 错误
-	if err := gormDB.Model(&Relation{}).Unscoped().Where("user_id = ? and video_id = ?", userID, toUserID).
+	if err := gormDB.Model(&Relation{}).Unscoped().Where("user_id = ? and to_user_id = ?", userID, toUserID).
 		First(&dest).Error; err != nil {
 		fmt.Println(err)
 		return false
