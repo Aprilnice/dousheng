@@ -2,7 +2,7 @@ package handler
 
 import (
 	"context"
-	favorite "dousheng/cmd/favorite/service"
+	favorite "dousheng/cmd/favourite/service"
 	"dousheng/pkg/constant"
 	"dousheng/pkg/doushengjwt"
 	"dousheng/pkg/errdeal"
@@ -12,7 +12,7 @@ import (
 
 // FavoriteActionHandler 点赞视频
 func FavoriteActionHandler(c *gin.Context) {
-	// "/douyin/favorite/action/?token=douyin123456&video_id=2&action_type=1"
+	// "/douyin/favourite/action/?token=douyin123456&video_id=2&action_type=1"
 	var favoriteParam FavoriteActionParam
 	if err := c.ShouldBindQuery(&favoriteParam); err != nil {
 		fmt.Println(err)

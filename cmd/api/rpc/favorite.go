@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	favorite "dousheng/cmd/favorite/service"
+	favorite "dousheng/cmd/favourite/service"
 	"dousheng/config"
 	"dousheng/pkg/constant"
 	"github.com/micro/go-micro/v2"

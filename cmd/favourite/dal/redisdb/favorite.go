@@ -1,7 +1,7 @@
 package redisdb
 
 import (
-	favorite "dousheng/cmd/favorite/service"
+	favorite "dousheng/cmd/favourite/service"
 	"dousheng/pkg/rediskey"
 	"github.com/go-redis/redis/v8"
 	"strconv"

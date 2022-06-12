@@ -1,26 +1,26 @@
 package core
 
 import (
-	favorite "dousheng/cmd/favorite/service"
+	favorite "dousheng/cmd/favourite/service"
 	"dousheng/pkg/errdeal"
 )
 
-type FavoriteResp struct {
+type FavouriteResp struct {
 	*errdeal.Response
 }
 
 // FavoriteActionResponse 这里实现将错误信息绑定到 自己的service Response 中
-func (f *FavoriteResp) FavoriteActionResponse(response *favorite.FavoriteActionResponse) {
+func (f *FavouriteResp) FavoriteActionResponse(response *favorite.FavoriteActionResponse) {
 	response.StatusCode = f.Response.StatusCode
 	response.StatusMsg = f.Response.StatusMessage
 }
 
-func (f *FavoriteResp) FavoriteListResponse(response *favorite.FavoriteListResponse) {
+func (f *FavouriteResp) FavoriteListResponse(response *favorite.FavoriteListResponse) {
 	response.StatusCode = f.Response.StatusCode
 	response.StatusMsg = f.Response.StatusMessage
 }
 
-func ResponseError(err error) *FavoriteResp {
+func ResponseError(err error) *FavouriteResp {
 	var resp *errdeal.Response
 	// 如果是自定义的那些错误
 	if codeErr, ok := err.(errdeal.CodeErr); ok {
@@ -28,13 +28,13 @@ func ResponseError(err error) *FavoriteResp {
 	}
 	// 否则直接视为服务错误
 	resp = errdeal.NewResponse(errdeal.CodeServiceErr).WithErr(err)
-	return &FavoriteResp{
+	return &FavouriteResp{
 		resp,
 	}
 }
 
-func ResponseSuccess() *FavoriteResp {
-	return &FavoriteResp{
+func ResponseSuccess() *FavouriteResp {
+	return &FavouriteResp{
 		errdeal.NewResponse(errdeal.CodeSuccess),
 	}
 

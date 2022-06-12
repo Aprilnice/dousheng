@@ -1,7 +1,7 @@
 package mysqldb
 
 import (
-	favorite "dousheng/cmd/favorite/service"
+	favorite "dousheng/cmd/favourite/service"
 	userDB "dousheng/cmd/user/dal/mysqldb"
 	videoDB "dousheng/cmd/video/dal/mysqldb"
 	"fmt"

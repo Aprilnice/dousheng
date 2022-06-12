@@ -1,4 +1,4 @@
-# 抖声 v_1.0
+# 抖声 v1.0
 ## 一、项目功能
 1. 具有登录和游客两种模式，下拉获取视频流，返回按投稿时间倒序视频列表
 2. 新用户可通过用户名、密码注册以及登录
@@ -17,7 +17,8 @@
    - 用户服务
    - 视频服务
    - 评论服务
-   - 点赞/关注服务
+   - 点赞服务
+   - 关注服务
 6. 中间件：
    - JWT鉴权
    - 密码md5加密
@@ -31,25 +32,28 @@
      - Redis存储
 ## 三、项目结构
 
-| package     | package        | function         |
-|-------------|----------------|------------------|
-| cmd         |                | 核心代码           |
-|             | api            | 获取请求，实例化服务 |
-|             | comment        | 评论服务具体实现       |
-|             | favourite        | 点赞/关注服务具体实现 |
-|      |           video     | 视频服务具体实现          |
-|             | user          | 用户服务具体实现           |
-| config      |                | 配置文件             |
-|             | config.yaml    | 配置文件             |
-|             | config.go      | 配置文件读取           |
-| file |                | 文件存储             |
-|             | video            | 视频文件存储         |
-| pkg         |                | 公共包              |
-|             | errdeal        | 错误处理             |
-|             | constant           |     常量             |
-|             | log            | 日志               |
-|             | middleware     | 中间件      |
-|             | snowflaker     | ID生成器            |
-|             | doushengjwt    | 用户鉴权相关           |
+| package | package     | introduction |
+|---------|-------------|--------------|
+| cmd     |             | 核心代码         |
+|         | api         | 获取请求，实例化服务   |
+|         | comment     | 评论服务具体实现     |
+|         | favourite   | 点赞服务具体实现     |
+|         | relation    | 关注服务具体实现     |
+|         | video       | 视频服务具体实现     |
+|         | user        | 用户服务具体实现     |
+| config  |             | 配置文件         |
+|         | config.yaml | 配置文件         |
+|         | config.go   | 配置文件读取       |
+| file    |             | 文件存储         |
+|         | video       | 视频文件存储       |
+|         | image       | 视频封面文件存储     |
+| pkg     |             | 公共包          |
+|         | errdeal     | 错误处理         |
+|         | constant    | 一些常量         |
+|         | ffmpeg      | 视频关键帧截取作为封面  |
+|         | log         | 日志           |
+|         | middleware  | 中间件          |
+|         | snowflaker  | ID生成器        |
+|         | doushengjwt | 用户鉴权相关       |
 
 

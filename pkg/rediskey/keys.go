@@ -5,7 +5,7 @@ import "strings"
 const (
 	KeySep          = ":" // 分隔符
 	KeyPrefix       = "dousheng"
-	KeyFavoriteZSet = "favorite:user"
+	KeyFavoriteZSet = "favourite:user"
 	KeyFeedZSet     = "video:feed"
 	KeyVideoHash    = "video"
 	KeyUserHash     = "user"

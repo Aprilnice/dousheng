@@ -1,4 +1,4 @@
 package core
 
-type FavoriteService struct {
+type FavouriteService struct {
 }

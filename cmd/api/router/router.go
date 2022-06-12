@@ -32,16 +32,16 @@ func Setup() *gin.Engine {
 			handler2.CommentActionHandler)
 
 		// 点赞
-		//"/douyin/favorite/action/?token=douyin123456&video_id=2&action_type=1"
-		r.POST("/douyin/favorite/action/",
+		//"/douyin/favourite/action/?token=douyin123456&video_id=2&action_type=1"
+		r.POST("/douyin/favourite/action/",
 			middlewares.JwtTokenMiddleware(middlewares.URLToken("token")),
 			handler2.FavoriteActionHandler)
-		r.GET("/douyin/favorite/list/",
+		r.GET("/douyin/favourite/list/",
 			middlewares.JwtTokenMiddleware(middlewares.URLToken("token")),
 			handler2.FavoriteListHandler)
 
 		// 关注
-		//"/douyin/favorite/list/?token=douyin123456"
+		//"/douyin/favourite/list/?token=douyin123456"
 		r.POST("/douyin/relation/action/",
 			middlewares.JwtTokenMiddleware(middlewares.URLToken("token")),
 			handler2.RelationActionHandler)

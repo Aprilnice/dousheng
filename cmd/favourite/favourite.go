@@ -50,7 +50,7 @@ func main() {
 
 	microService.Init()
 	// 服务注册
-	err := favorite.RegisterFavoriteHandler(microService.Server(), new(core.FavoriteService))
+	err := favorite.RegisterFavoriteHandler(microService.Server(), new(core.FavouriteService))
 	if err != nil {
 		log.Println("点赞服务注册失败失败")
 		log.Fatal(err)

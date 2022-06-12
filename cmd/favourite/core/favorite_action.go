@@ -2,15 +2,15 @@ package core
 
 import (
 	"context"
-	favoriteDB "dousheng/cmd/favorite/dal/mysqldb"
-	favoriteRDB "dousheng/cmd/favorite/dal/redisdb"
-	favorite "dousheng/cmd/favorite/service"
+	favoriteDB "dousheng/cmd/favourite/dal/mysqldb"
+	favoriteRDB "dousheng/cmd/favourite/dal/redisdb"
+	favorite "dousheng/cmd/favourite/service"
 	"dousheng/pkg/errdeal"
 	"fmt"
 )
 
 // FavoriteAction 点赞
-func (*FavoriteService) FavoriteAction(ctx context.Context, req *favorite.FavoriteActionRequest, resp *favorite.FavoriteActionResponse) error {
+func (*FavouriteService) FavoriteAction(ctx context.Context, req *favorite.FavoriteActionRequest, resp *favorite.FavoriteActionResponse) error {
 
 	if req.ActionType == 1 {
 

@@ -2,9 +2,9 @@ package core
 
 import (
 	"context"
-	favoriteDB "dousheng/cmd/favorite/dal/mysqldb"
-	favoriteRDB "dousheng/cmd/favorite/dal/redisdb"
-	favorite "dousheng/cmd/favorite/service"
+	favoriteDB "dousheng/cmd/favourite/dal/mysqldb"
+	favoriteRDB "dousheng/cmd/favourite/dal/redisdb"
+	favorite "dousheng/cmd/favourite/service"
 	userDB "dousheng/cmd/user/dal/mysqldb"
 	videoDB "dousheng/cmd/video/dal/mysqldb"
 	"fmt"
@@ -12,7 +12,7 @@ import (
 )
 
 // FavoriteList 点赞列表
-func (*FavoriteService) FavoriteList(ctx context.Context, req *favorite.FavoriteListRequest,
+func (*FavouriteService) FavoriteList(ctx context.Context, req *favorite.FavoriteListRequest,
 	resp *favorite.FavoriteListResponse) (err error) {
 	videoIds := favoriteRDB.FavoriteVideosID(req.UserId)
 	if len(videoIds) == 0 { // 无点赞

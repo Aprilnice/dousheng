@@ -52,7 +52,7 @@ server:
     address: 127.0.0.1:8970
   favorite:
     machine_id: 4
-    name: srv.favorite
+    name: srv.favourite
     address: 127.0.0.1:8950
   relation:
     machine_id: 5
