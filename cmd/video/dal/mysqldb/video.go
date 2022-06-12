@@ -31,7 +31,7 @@ func PublishVideo(video *VideoInfo) error {
 
 // GetVideoFeed 获取feed流
 func GetVideoFeed(latestTime int64) (videos []VideoInfo, err error) {
-	err = gormDB.Table("t_video_infos").Where("publish_time <= ?",latestTime).Order("publish_time desc").Limit(30).Find(&videos).Error
+	err = gormDB.Table("t_video_infos").Where("publish_time <= ?", latestTime).Order("publish_time desc").Limit(30).Find(&videos).Error
 	return videos, err
 }
 
@@ -43,6 +43,7 @@ func GetUserInfo(userId int64) (user userInfo.UserInfo, err error) {
 
 // GetVideoList 获取用户视频列表
 func GetVideoList(userId int64) (videos []VideoInfo, err error) {
-	err = gormDB.Table("t_video_infos").Where("user_id = ?", userId).Find(&videos).Error
+	err = gormDB.Model(&VideoInfo{}).Where("author_id = ?", userId).Find(&videos).Error
+	//fmt.Println(videos, "mysql videos:")
 	return videos, err
 }

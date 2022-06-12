@@ -11,6 +11,7 @@ const (
 	KeyUserHash     = "user"
 	KeyUserFollow   = "follow:user"
 	KeyUserFollower = "follower:user"
+	KeyIsFollow     = "isFollow:user"
 )
 
 func NewRedisKey(keys ...string) (redisKey string) {

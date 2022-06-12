@@ -20,6 +20,7 @@ func main() {
 	config.Instance().WithServerConfig(constant.ServerVideo)
 	config.Instance().WithServerConfig(constant.ServerUser)
 	config.Instance().WithServerConfig(constant.ServerFavorite)
+	config.Instance().WithServerConfig(constant.ServerRelation)
 
 	rpc.Init()
 

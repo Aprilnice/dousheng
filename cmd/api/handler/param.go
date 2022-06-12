@@ -39,3 +39,13 @@ type FavoriteActionParam struct {
 type FavoriteListParam struct {
 	Token string `form:"token" json:"token,omitempty" binding:"required"` // 用户鉴权
 }
+
+type RelationActionParam struct {
+	Token      string `form:"token" json:"token,omitempty" binding:"required"`                       // 用户鉴权
+	UserId     int64  `form:"user_id" json:"user_id,omitempty,string"`                               // 用户id 加上string 防止 js 精度溢出
+	ToUserId   int64  `form:"to_user_id" json:"to_user_id,omitempty,string"`                         // 用户id 加上string 防止 js 精度溢出
+	ActionType int32  `form:"action_type" json:"action_type,omitempty" binding:"required,oneof=1 2"` // 1 发布评论 2删除评论
+}
+type RelationListParam struct {
+	Token string `form:"token" json:"token,omitempty" binding:"required"` // 用户鉴权
+}

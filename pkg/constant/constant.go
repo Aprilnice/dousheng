@@ -9,9 +9,11 @@ const (
 	ServerFavorite = "favorite" // 评论服务
 	ServerVideo    = "video"
 	ServerUser     = "user"
+	ServerRelation = "relation"
 
 	ClientComment  = "dy.client.comment"
 	ClientFavorite = "dy.client.favorite"
 	ClientVideo    = "dy.client.video"
 	ClientUser     = "dy.client.user"
+	ClientRelation = "dy.client.relation"
 )

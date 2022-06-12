@@ -5,7 +5,7 @@ import (
 	"dousheng/cmd/video/dal/mysqldb"
 	"dousheng/cmd/video/dal/redisdb"
 	video "dousheng/cmd/video/service"
-	"errors"
+	"dousheng/pkg/errdeal"
 )
 
 // GetVideoList 获取用户视频列表
@@ -13,35 +13,46 @@ func (*VideoModuleService) GetVideoList(c context.Context, req *video.GetVideoLi
 	// 从redis获取视频信息
 	videos, err := redisdb.GetVideoList(req.UserId)
 	if err != nil {
-		if errors.Is(err, errors.New("redis: nil")) {
-			//从MySQL获取视频信息
-			videos, err = mysqldb.GetVideoList(req.UserId)
-			if err != nil {
-				resp.StatusCode = 10001
-				resp.StatusMsg = "服务繁忙"
-				return err
-			}
-		}else {
-			resp.StatusCode = 10001
-			resp.StatusMsg = "服务繁忙"
+		r := errdeal.NewResponse(errdeal.CodeServiceErr)
+		resp.StatusCode = r.StatusCode
+		resp.StatusMsg = r.StatusMessage
+		return err
+	}
+	if len(videos) <= 0 {
+		//从MySQL获取视频信息
+		if videos, err = mysqldb.GetVideoList(req.UserId); err != nil {
+			r := errdeal.NewResponse(errdeal.CodeServiceErr)
+			resp.StatusCode = r.StatusCode
+			resp.StatusMsg = r.StatusMessage
+			return err
+		}
+		// 确实不存在发布的视频
+		if len(videos) <= 0 {
+			r := errdeal.NewResponse(errdeal.CodeSuccess)
+			resp.StatusCode = r.StatusCode
+			resp.StatusMsg = r.StatusMessage
 			return err
 		}
 	}
 
+	//fmt.Println(videos, "videos: ")
+	//fmt.Println(err, "err: ")
+
 	// 从redis获取用户信息
 	author, err := redisdb.GetAuthorInfo(req.UserId)
-	if err != nil{
-		if errors.Is(err, errors.New("redis: nil")) {
-			// 从MySQL获取视频作者信息
-			author, err = mysqldb.GetUserInfo(req.UserId)
-			if err != nil {
-				resp.StatusCode = 10001
-				resp.StatusMsg = "服务繁忙"
-				return err
-			}
-		}else {
-			resp.StatusCode = 10001
-			resp.StatusMsg = "服务繁忙"
+	if err != nil {
+		r := errdeal.NewResponse(errdeal.CodeServiceErr)
+		resp.StatusCode = r.StatusCode
+		resp.StatusMsg = r.StatusMessage
+		return err
+	}
+	if author.UserId <= 0 {
+		// 从MySQL获取视频作者信息
+		author, err = mysqldb.GetUserInfo(req.UserId)
+		if err != nil {
+			r := errdeal.NewResponse(errdeal.CodeServiceErr)
+			resp.StatusCode = r.StatusCode
+			resp.StatusMsg = r.StatusMessage
 			return err
 		}
 	}

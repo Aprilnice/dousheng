@@ -54,3 +54,7 @@ server:
     machine_id: 4
     name: srv.favorite
     address: 127.0.0.1:8950
+  relation:
+    machine_id: 5
+    name: srv.relation
+    address: 127.0.0.1:8980

@@ -109,14 +109,14 @@ func JudgeUser(userId int64) bool {
 	).Result()
 	if len(result) == 0 {
 		return false
-	}else {
+	} else {
 		return true
 	}
 }
 
 // AddUserInfo 向redis中添加用户信息
 func AddUserInfo(user userInfo.UserInfo) error {
-	return 	rdb.HSet(
+	return rdb.HSet(
 		ctx,
 		// key值为用户id
 		rediskey.NewRedisKey(rediskey.KeyUserHash, strconv.FormatInt(user.UserId, 10)),
@@ -136,8 +136,11 @@ func AddUserInfo(user userInfo.UserInfo) error {
 func GetAuthorInfo(authorId int64) (user userInfo.UserInfo, err error) {
 	info, err := rdb.HGetAll(
 		ctx,
-		rediskey.NewRedisKey(rediskey.KeyUserHash,strconv.FormatInt(authorId, 10)),
+		rediskey.NewRedisKey(rediskey.KeyUserHash, strconv.FormatInt(authorId, 10)),
 	).Result()
+	if len(info) <= 0 {
+		return
+	}
 	user.UserId = authorId
 	user.Name = info["Name"]
 	user.FollowCount, _ = strconv.ParseInt(info["FollowCount"], 10, 64)
@@ -155,7 +158,7 @@ func GetLike(userId int64, videoId int64) bool {
 	// key不存在err = redis: nil
 	if err != nil {
 		return false
-	}else {
+	} else {
 		return true
 	}
 }
@@ -167,7 +170,7 @@ func GetFollow(userId int64, authorId int64) {
 
 // AddVideoToUser 视频信息存入用户信息便于获取发布列表
 func AddVideoToUser(userId int64, videoId int64) error {
-	return 	rdb.HSet(
+	return rdb.HSet(
 		ctx,
 		// key值为用户id
 		rediskey.NewRedisKey(rediskey.KeyUserHash, strconv.FormatInt(userId, 10)),
@@ -188,7 +191,7 @@ func GetVideoList(userId int64) (videos []mysqldb.VideoInfo, err error) {
 
 	// 获取具体视频信息
 	var tmp mysqldb.VideoInfo
-	for i := 0; i < len(videoList) - 3; i++ {
+	for i := 0; i < len(videoList)-3; i++ {
 		// 获取视频信息
 		videosInfo, err := rdb.HGetAll(
 			ctx,
