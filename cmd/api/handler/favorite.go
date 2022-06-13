@@ -60,7 +60,7 @@ func FavoriteListHandler(c *gin.Context) {
 	// 校验参数 判断视频是否存在
 
 	// 解析token
-	token, err := doushengjwt.ParseToken(favoriteParam.Token)
+	_, err := doushengjwt.ParseToken(favoriteParam.Token)
 	if err != nil {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("无效的 token"))
 		return
@@ -69,7 +69,7 @@ func FavoriteListHandler(c *gin.Context) {
 	// 绑定参数
 	favoriteReq := favorite.FavoriteListRequest{
 		Token:  favoriteParam.Token,
-		UserId: token.UserID,
+		UserId: favoriteParam.UserId,
 	}
 
 	// rpc 调用

@@ -53,7 +53,7 @@ func FollowListHandler(c *gin.Context) {
 	}
 
 	// 解析token
-	token, err := doushengjwt.ParseToken(relationListParam.Token)
+	_, err := doushengjwt.ParseToken(relationListParam.Token)
 	if err != nil {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("无效的 token"))
 		return
@@ -61,7 +61,7 @@ func FollowListHandler(c *gin.Context) {
 	// 绑定参数
 	followReq := relation.FollowListRequest{
 		Token:  relationListParam.Token,
-		UserId: token.UserID,
+		UserId: relationListParam.UserId,
 	}
 	relationRPC := c.Keys[constant.ClientRelation].(relation.RelationService)
 	resp, err := relationRPC.FollowList(context.Background(), &followReq)
@@ -84,7 +84,7 @@ func FollowerListHandler(c *gin.Context) {
 	}
 
 	// 解析token
-	token, err := doushengjwt.ParseToken(relationListParam.Token)
+	_, err := doushengjwt.ParseToken(relationListParam.Token)
 	if err != nil {
 		HttpResponse(c, errdeal.NewResponse(errdeal.CodeParamErr).WithMsg("无效的 token"))
 		return
@@ -92,7 +92,7 @@ func FollowerListHandler(c *gin.Context) {
 	// 绑定参数
 	followerReq := relation.FollowerListRequest{
 		Token:  relationListParam.Token,
-		UserId: token.UserID,
+		UserId: relationListParam.UserId,
 	}
 	relationRPC := c.Keys[constant.ClientRelation].(relation.RelationService)
 	resp, err := relationRPC.FollowerList(context.Background(), &followerReq)

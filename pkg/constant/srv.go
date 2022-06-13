@@ -5,8 +5,8 @@ package constant
 */
 
 const (
-	ServerComment  = "comment"   // 评论服务 config中的名字
-	ServerFavorite = "favourite" // 评论服务
+	ServerComment  = "comment"  // 评论服务 config中的名字
+	ServerFavorite = "favorite" // 评论服务
 	ServerVideo    = "video"
 	ServerUser     = "user"
 	ServerRelation = "relation"

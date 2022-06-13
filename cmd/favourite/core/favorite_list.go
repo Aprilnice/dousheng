@@ -82,8 +82,8 @@ func (*FavouriteService) FavoriteList(ctx context.Context, req *favorite.Favorit
 			Author:        &u,
 			PlayUrl:       video.PlayUrl,
 			CoverUrl:      video.CoverUrl,
-			FavoriteCount: 100,
-			CommentCount:  30,
+			FavoriteCount: video.FavoriteCount,
+			CommentCount:  video.CommentCount,
 			IsFavorite:    true,
 			Title:         video.Title,
 		}

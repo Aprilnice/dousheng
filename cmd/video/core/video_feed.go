@@ -26,7 +26,7 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 				resp.NextTime = req.LatestTime
 				return err
 			}
-		}else {
+		} else {
 			return err
 		}
 	}
@@ -38,7 +38,7 @@ func (*VideoModuleService) VideoFeed(c context.Context, req *video.DouyinFeedReq
 		if req.UserId != 0 {
 			// 获取like和follow
 			like = redisdb.GetLike(req.UserId, videos[i].Id)
-			//follow = redisdb.GetFollow(req.UserId, videos[i].AuthorId)
+			follow = redisdb.GetFollow(req.UserId, videos[i].AuthorId)
 		}
 
 		// 从redis获取作者信息

@@ -37,7 +37,8 @@ type FavoriteActionParam struct {
 	ActionType int32  `form:"action_type" json:"action_type,omitempty" binding:"required,oneof=1 2"` // 1 发布评论 2删除评论
 }
 type FavoriteListParam struct {
-	Token string `form:"token" json:"token,omitempty" binding:"required"` // 用户鉴权
+	Token  string `form:"token" json:"token,omitempty" binding:"required"` // 用户鉴权
+	UserId int64  `form:"user_id" json:"user_id,omitempty,string"`
 }
 
 type RelationActionParam struct {
@@ -47,5 +48,6 @@ type RelationActionParam struct {
 	ActionType int32  `form:"action_type" json:"action_type,omitempty" binding:"required,oneof=1 2"` // 1 发布评论 2删除评论
 }
 type RelationListParam struct {
-	Token string `form:"token" json:"token,omitempty" binding:"required"` // 用户鉴权
+	Token  string `form:"token" json:"token,omitempty" binding:"required"` // 用户鉴权
+	UserId int64  `form:"user_id" json:"user_id,omitempty,string"`
 }

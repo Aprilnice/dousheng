@@ -25,6 +25,11 @@ func DoFollow(userID, toUserID int64) error {
 		Score:  float64(time.Now().Unix()),
 		Member: userID,
 	})
+	// 修改用户信息
+	userKey := rediskey.NewRedisKey(rediskey.KeyUserHash, userIDStr)
+	toUserKey := rediskey.NewRedisKey(rediskey.KeyUserHash, toUserIDStr)
+	pipeline.HIncrBy(ctx, userKey, "FollowCount", 1)     // 关注加一
+	pipeline.HIncrBy(ctx, toUserKey, "FollowerCount", 1) // 对面粉丝加一
 	_, err := pipeline.Exec(ctx)
 	return err
 
@@ -42,44 +47,69 @@ func CancelFollow(userID, toUserID int64) error {
 	// 对方粉丝；列表删除一个粉丝
 	followerKey := rediskey.NewRedisKey(rediskey.KeyUserFollower, toUserIDStr)
 	pipeline.ZRem(ctx, followerKey, userID)
+	// 修改用户信息
+	userKey := rediskey.NewRedisKey(rediskey.KeyUserHash, userIDStr)
+	toUserKey := rediskey.NewRedisKey(rediskey.KeyUserHash, toUserIDStr)
+	pipeline.HIncrBy(ctx, userKey, "FollowCount", -1)     // 关注减一
+	pipeline.HIncrBy(ctx, toUserKey, "FollowerCount", -1) // 对面粉丝减一
 	_, err := pipeline.Exec(ctx)
 	return err
 }
 
 // FollowList 关注列表
-func FollowList(userID int64) ([]string, error) {
+func FollowList(userID, selfID int64) ([]string, []string, error) {
 	userIDStr := strconv.FormatInt(userID, 10)
+	selfIDStr := strconv.FormatInt(selfID, 10)
 	followKey := rediskey.NewRedisKey(rediskey.KeyUserFollow, userIDStr)
 	follows, err := rdb.ZRevRangeByScore(ctx, followKey, &redis.ZRangeBy{
 		Min: "-inf",
 		Max: "+inf",
 	}).Result()
-	return follows, err
+	var followed []string
+	if selfID == userID { // 如果查看的是自己的关注列表
+		followed = follows
+	} else {
+		// 自己的关注列表
+		selfFollowKey := rediskey.NewRedisKey(rediskey.KeyUserFollow, selfIDStr)
+		isFollowKey := rediskey.NewRedisKey(rediskey.KeyIsFollow, userIDStr, selfIDStr)
+		followed = interStore(isFollowKey, selfFollowKey, followKey)
+	}
+	return follows, followed, err
 }
 
 // FollowerList 粉丝列表  同时返回已关注的
-func FollowerList(userID int64) ([]string, []string, error) {
+func FollowerList(userID, selfID int64) ([]string, []string, error) {
 	userIDStr := strconv.FormatInt(userID, 10)
+	selfIDStr := strconv.FormatInt(selfID, 10)
+	// 粉丝列表
 	followerKey := rediskey.NewRedisKey(rediskey.KeyUserFollower, userIDStr)
 	followers, err := rdb.ZRevRangeByScore(ctx, followerKey, &redis.ZRangeBy{
 		Min: "-inf",
 		Max: "+inf",
 	}).Result()
 
-	followKey := rediskey.NewRedisKey(rediskey.KeyUserFollow, userIDStr)
+	// 自己的关注列表
+	followKey := rediskey.NewRedisKey(rediskey.KeyUserFollow, selfIDStr)
 	// ISFollow
-	isFollowKey := rediskey.NewRedisKey(rediskey.KeyIsFollow, userIDStr)
-	if rdb.Exists(ctx, isFollowKey).Val() < 1 {
-		rdb.ZInterStore(ctx, isFollowKey, &redis.ZStore{
-			Keys:      []string{followKey, followerKey},
+	isFollowKey := rediskey.NewRedisKey(rediskey.KeyIsFollow, userIDStr, selfIDStr)
+	// 返回交集
+	followed := interStore(isFollowKey, followKey, followerKey)
+
+	return followers, followed, err
+}
+
+func interStore(key, key1, key2 string) []string {
+
+	if rdb.Exists(ctx, key).Val() < 1 {
+		rdb.ZInterStore(ctx, key, &redis.ZStore{
+			Keys:      []string{key1, key2},
 			Aggregate: "MAX",
 		})
-		rdb.Expire(ctx, isFollowKey, 180*time.Second) // 设置三分钟过期
+		rdb.Expire(ctx, key, 60*time.Second) // 设置1分钟过期
 	}
-	followed, err := rdb.ZRevRangeByScore(ctx, isFollowKey, &redis.ZRangeBy{
+	followed, _ := rdb.ZRevRangeByScore(ctx, key, &redis.ZRangeBy{
 		Min: "-inf",
 		Max: "+inf",
 	}).Result()
-
-	return followers, followed, err
+	return followed
 }

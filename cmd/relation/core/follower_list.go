@@ -5,6 +5,7 @@ import (
 	"dousheng/cmd/relation/dal/mysqldb"
 	"dousheng/cmd/relation/dal/redisdb"
 	relation "dousheng/cmd/relation/service"
+	"dousheng/pkg/doushengjwt"
 	"dousheng/pkg/errdeal"
 	"strconv"
 )
@@ -12,7 +13,11 @@ import (
 func (*RelationService) FollowerList(ctx context.Context, req *relation.FollowerListRequest,
 	resp *relation.FollowerListResponse) error {
 	userId := req.GetUserId()
-	followIDs, followedIds, err := redisdb.FollowerList(userId)
+
+	// 解析token
+	token, _ := doushengjwt.ParseToken(req.Token)
+	selfId := token.UserID
+	followIDs, followedIDs, err := redisdb.FollowerList(userId, selfId)
 	if err != nil {
 		// 出现错误  这里一般都是数据库错误
 		r := errdeal.NewResponse(errdeal.CodeServiceErr)
@@ -20,8 +25,8 @@ func (*RelationService) FollowerList(ctx context.Context, req *relation.Follower
 		resp.StatusMsg = r.StatusMessage
 		return err
 	}
-	followed := make(map[string]bool, len(followedIds))
-	for _, id := range followedIds {
+	followed := make(map[string]bool, len(followedIDs))
+	for _, id := range followedIDs {
 		followed[id] = true
 	}
 

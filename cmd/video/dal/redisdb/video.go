@@ -164,7 +164,15 @@ func GetLike(userId int64, videoId int64) bool {
 }
 
 // GetFollow 获取是否关注
-func GetFollow(userId int64, authorId int64) {
+func GetFollow(userId int64, authorId int64) bool {
+	if _, err := rdb.ZRank( // key不存在err = redis: nil
+		ctx,
+		rediskey.NewRedisKey(rediskey.KeyUserFollow, strconv.FormatInt(userId, 10)),
+		strconv.FormatInt(authorId, 10),
+	).Result(); err != nil {
+		return false
+	}
+	return true
 
 }
 
