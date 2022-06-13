@@ -56,8 +56,14 @@
 |         | snowflaker  | ID生成器        |
 |         | doushengjwt | 用户鉴权相关       |
 
+## 四 运行
+    Windows 用户需要下载ffmpeg可执行文件，放在项目目录下。
+- `git clone https://github.com/Aprilnice/dousheng.git`
+- `在config.yaml中配置好自己的参数`
+- `分别执行cmd目录下api comment favorite video user relation服务`
+
 ## 鸣谢
 
- https://youthcamp.bytedance.com/
+[字节后端青训营](https://youthcamp.bytedance.com/)
 
 
