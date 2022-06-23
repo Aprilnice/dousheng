@@ -62,6 +62,9 @@
 - `在config.yaml中配置好自己的参数`
 - `分别执行cmd目录下api comment favorite video user relation服务`
 
+## 五 项目展示
+[项目展示文档](https://bytedancecampus1.feishu.cn/docx/doxcnHUUV6ZiJyWny6ohAPyhnob)
+
 ## 鸣谢
 
 [字节后端青训营](https://youthcamp.bytedance.com/)
